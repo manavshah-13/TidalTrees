@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - TidalTrees</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="container nav">
+            <a href="index.html" class="nav__logo">
+                <i class="fas fa-tree"></i> TidalTrees
+            </a>
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li><a href="index.html" class="nav__link">Home</a></li>
+                    <li><a href="community.html" class="nav__link">Community</a></li>
+                    <li><a href="reporting.html" class="nav__link">Reporting</a></li>
+                    <li><a href="ai-validation.html" class="nav__link">AI Validation</a></li>
+                    <li><a href="leaderboard.html" class="nav__link">Leaderboard</a></li>
+                    <li><a href="contact.html" class="nav__link active">Contact</a></li>
+                </ul>
+            </div>
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="section container">
+            <h1 class="section__title">Connect With Us</h1>
+            <p class="section__subtitle">Join our mission to protect mangrove ecosystems. We're here to support your conservation efforts.</p>
+
+            <!-- Contact Info Cards -->
+            <div class="contact-info-grid">
+                <div class="card contact-info-card">
+                    <i class="fas fa-envelope-open-text"></i>
+                    <h3>Email Us</h3>
+                    <p>Get in touch via email</p>
+                    <a href="mailto:hello@tidaltrees.org">hello@tidaltrees.org</a>
+                </div>
+                <div class="card contact-info-card">
+                    <i class="fas fa-phone-alt"></i>
+                    <h3>Call Us</h3>
+                    <p>24/7 Emergency Hotline</p>
+                    <strong>+1-800-MANGROVE</strong>
+                </div>
+                <div class="card contact-info-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Visit Us</h3>
+                    <p>Our headquarters</p>
+                    <strong>Marine Conservation Center, Mumbai</strong>
+                </div>
+                 <div class="card contact-info-card">
+                    <i class="fas fa-headset"></i>
+                    <h3>Live Chat</h3>
+                    <p>Instant support</p>
+                    <strong>Available 9 AM - 6 PM IST</strong>
+                </div>
+            </div>
+
+            <!-- Main Contact Grid -->
+            <div class="contact-main-grid">
+                <!-- Contact Form -->
+                <div class="card contact-form-card">
+                    <h2 class="card__title">Send Us a Message</h2>
+                    <form class="contact-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first-name">First Name</label>
+                                <input type="text" id="first-name" placeholder="Enter your first name">
+                            </div>
+                            <div class="form-group">
+                                <label for="last-name">Last Name</label>
+                                <input type="text" id="last-name" placeholder="Enter your last name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" placeholder="your.email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" placeholder="How can we help you?">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" rows="6" placeholder="Tell us about your environmental concerns or conservation ideas..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Send Message <i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+                <!-- Right Sidebar -->
+                <div class="contact-sidebar">
+                    <div class="card">
+                        <h2 class="card__title"><i class="fas fa-bullseye"></i> Our Mission</h2>
+                        <p class="mission-text">TidalTrees is dedicated to protecting and restoring mangrove ecosystems through community-driven conservation efforts and cutting-edge AI technology.</p>
+                        <div class="mission-stats">
+                            <div><strong>50K+</strong><span>Acres Monitored</span></div>
+                            <div><strong>12K+</strong><span>Active Guardians</span></div>
+                            <div><strong>95%</strong><span>Success Rate</span></div>
+                        </div>
+                    </div>
+                     <div class="card">
+                        <h2 class="card__title"><i class="fas fa-users"></i> Meet Our Team</h2>
+                        <div class="team-grid">
+                            <div class="team-member">
+                                <div class="feed__avatar ps">PS</div>
+                                <p><strong>Dr. Priya Sharma</strong><br><span>Marine Biologist & Founder</span></p>
+                            </div>
+                             <div class="team-member">
+                                <div class="feed__avatar rv">RV</div>
+                                <p><strong>Raj Verma</strong><br><span>Technology Director</span></p>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="card">
+                        <h2 class="card__title"><i class="fas fa-globe-asia"></i> Global Presence</h2>
+                        <ul class="presence-list">
+                            <li><span>🇮🇳 India</span> <strong>4,821 Guardians</strong></li>
+                            <li><span>🇧🇩 Bangladesh</span> <strong>2,556 Guardians</strong></li>
+                            <li><span>🇮🇩 Indonesia</span> <strong>1,987 Guardians</strong></li>
+                            <li><span>🇵🇭 Philippines</span> <strong>1,432 Guardians</strong></li>
+                            <li><span>🇨🇳 China</span> <strong>2,434 Guardians</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer__content">
+            <p>&copy; 2025 TidalTrees. All rights reserved.</p>
+            <div class="footer__socials">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

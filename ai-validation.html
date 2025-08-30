@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Validation System - TidalTrees</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="container nav">
+            <a href="index.html" class="nav__logo">
+                <i class="fas fa-tree"></i> TidalTrees
+            </a>
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li><a href="index.html" class="nav__link">Home</a></li>
+                    <li><a href="community.html" class="nav__link">Community</a></li>
+                    <li><a href="reporting.html" class="nav__link">Reporting</a></li>
+                    <li><a href="ai-validation.html" class="nav__link active">AI Validation</a></li>
+                    <li><a href="leaderboard.html" class="nav__link">Leaderboard</a></li>
+                    <li><a href="contact.html" class="nav__link">Contact</a></li>
+                </ul>
+            </div>
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="section container">
+            <h1 class="section__title">AI Validation System</h1>
+            <p class="section__subtitle">Advanced AI technology for rapid environmental threat assessment and validation.</p>
+
+            <!-- AI Stats -->
+            <div class="stats ai__stats">
+                <div class="card stat__card">
+                    <p class="stat__value">94.7%</p>
+                    <p class="stat__label">Validation Accuracy</p>
+                </div>
+                <div class="card stat__card">
+                    <p class="stat__value">12,847</p>
+                    <p class="stat__label">Reports Processed</p>
+                </div>
+                <div class="card stat__card">
+                    <p class="stat__value">2.3s</p>
+                    <p class="stat__label">Avg Response Time</p>
+                </div>
+                <div class="card stat__card">
+                     <p class="stat__value">3.2%</p>
+                    <p class="stat__label">False-Positive Rate</p>
+                </div>
+            </div>
+
+            <!-- Main AI Grid -->
+            <div class="ai__grid">
+                <!-- Submit for Analysis -->
+                <div class="card ai-submit-card">
+                    <h2 class="card__title"><i class="fas fa-paper-plane"></i> Submit for AI Analysis</h2>
+                    <div class="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p><strong>Upload Environmental Evidence</strong></p>
+                        <p>AI will analyze images for environmental threats and damage.</p>
+                    </div>
+                    <div class="submit-buttons">
+                        <button class="btn btn-primary"><i class="fas fa-image"></i> Upload Image</button>
+                        <button class="btn btn-secondary"><i class="fas fa-camera"></i> Take Photo</button>
+                    </div>
+                </div>
+
+                <!-- Recent Validations -->
+                <div class="card recent-validations-card">
+                    <h2 class="card__title"><i class="fas fa-history"></i> Recent AI Validations</h2>
+                    <div class="validation-item">
+                        <div class="validation-item__header">
+                            <p class="validation-item__title">Illegal Dumping in Sundarbans</p>
+                            <div class="validation-item__confidence">94% <i class="fas fa-check-circle success"></i></div>
+                        </div>
+                        <p class="validation-item__details">High confidence detection of plastic waste near mangrove roots. Immediate action recommended.</p>
+                        <div class="validation-item__footer">
+                            <span class="tag tag-validated">Validated</span>
+                            <a href="#" class="btn-details">View Details</a>
+                        </div>
+                    </div>
+                    <div class="validation-item">
+                        <div class="validation-item__header">
+                            <p class="validation-item__title">Mangrove Deforestation Alert</p>
+                            <div class="validation-item__confidence">87% <i class="fas fa-exclamation-triangle warning"></i></div>
+                        </div>
+                        <p class="validation-item__details">Satellite imagery confirms unauthorized clearing of mangrove area. Authority notification sent.</p>
+                         <div class="validation-item__footer">
+                            <span class="tag tag-validated">Validated</span>
+                            <a href="#" class="btn-details">View Details</a>
+                        </div>
+                    </div>
+                     <div class="validation-item">
+                        <div class="validation-item__header">
+                            <p class="validation-item__title">Water Quality Assessment</p>
+                            <div class="validation-item__confidence">76% <i class="fas fa-hourglass-half pending"></i></div>
+                        </div>
+                        <p class="validation-item__details">Moderate confidence in water discoloration detection. Awaiting additional validation.</p>
+                         <div class="validation-item__footer">
+                            <span class="tag tag-pending">Pending Review</span>
+                            <a href="#" class="btn-details">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Capabilities Section -->
+            <section class="ai-capabilities">
+                <h2 class="section__title">AI Detection Capabilities</h2>
+                <div class="how-it-works__grid">
+                    <div class="card">
+                        <div class="card__icon"><i class="fas fa-search-location"></i></div>
+                        <h3 class="card__title">Threat Detection</h3>
+                        <p class="card__description">Identifies pollution, illegal dumping, and habitat destruction from images.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card__icon"><i class="fas fa-leaf"></i></div>
+                        <h3 class="card__title">Health Assessment</h3>
+                        <p class="card__description">Evaluates mangrove ecosystem health and biodiversity indicators.</p>
+                    </div>
+                     <div class="card">
+                        <div class="card__icon"><i class="fas fa-sort-amount-up-alt"></i></div>
+                        <h3 class="card__title">Priority Ranking</h3>
+                        <p class="card__description">Automatically prioritizes reports based on urgency and impact level.</p>
+                    </div>
+                </div>
+            </section>
+
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer__content">
+            <p>&copy; 2025 TidalTrees. All rights reserved.</p>
+            <div class="footer__socials">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
