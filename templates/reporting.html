@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Environmental Reporting - TidalTrees</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="reporting-page">
+    <!-- Header -->
+    <header class="header">
+        <nav class="container nav">
+            <a href="{{ url_for('index') }}" class="nav__logo">
+                <i class="fas fa-tree"></i> TidalTrees
+            </a>
+            <div class="nav__menu">
+                <ul class="nav__list">
+                    <li><a href="{{ url_for('index') }}" class="nav__link">Home</a></li>
+                    <li><a href="{{ url_for('community') }}" class="nav__link">Community</a></li>
+                    <li><a href="{{ url_for('reporting') }}" class="nav__link active">Reporting</a></li>
+                    <li><a href="{{ url_for('ai_validation') }}" class="nav__link">AI Validation</a></li>
+                    <li><a href="{{ url_for('leaderboard') }}" class="nav__link">Leaderboard</a></li>
+                    <li><a href="{{ url_for('contact') }}" class="nav__link">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="reporting-main">
+        <div class="reporting-header">
+            <h1>Environmental Reporting</h1>
+            <p>Help protect our mangrove ecosystems by reporting environmental threats.</p>
+        </div>
+
+        <div class="reporting-container">
+            <div class="progress-track">
+                <div class="progress-line"></div>
+                <div class="progress-step active">
+                    <div class="step-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <span class="step-label">Step 1</span>
+                    <p>Location & Details</p>
+                </div>
+                <div class="progress-step">
+                    <div class="step-icon">
+                        <i class="fas fa-upload"></i>
+                    </div>
+                    <span class="step-label">Step 2</span>
+                    <p>Evidence Upload</p>
+                </div>
+                <div class="progress-step">
+                    <div class="step-icon">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <span class="step-label">Step 3</span>
+                    <p>Review & Submit</p>
+                </div>
+            </div>
+
+            <div class="report-form">
+                <div class="input-group">
+                    <label>Report Title</label>
+                    <input type="text" placeholder="Brief description of the environmental issue">
+                </div>
+
+                <div class="input-group">
+                    <label>Location</label>
+                    <input type="text" placeholder="Enter location or coordinates">
+                </div>
+
+                <div class="input-group">
+                    <label>Severity Level</label>
+                    <div class="severity-options">
+                        <div class="severity-option">
+                            <div class="severity-dot low"></div>
+                            <div>
+                                <strong>Low Priority</strong>
+                                <p>Minor environmental concern</p>
+                            </div>
+                        </div>
+                        <div class="severity-option">
+                            <div class="severity-dot medium"></div>
+                            <div>
+                                <strong>Medium Priority</strong>
+                                <p>Moderate threat requiring attention</p>
+                            </div>
+                        </div>
+                        <div class="severity-option">
+                            <div class="severity-dot high"></div>
+                            <div>
+                                <strong>High Priority</strong>
+                                <p>Serious environmental damage</p>
+                            </div>
+                        </div>
+                        <div class="severity-option">
+                            <div class="severity-dot critical"></div>
+                            <div>
+                                <strong>Critical Priority</strong>
+                                <p>Immediate and severe threat—urgent action required</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Detailed Description</label>
+                    <textarea rows="4" placeholder="Provide detailed information about the environmental issue..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-next">Next Step <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

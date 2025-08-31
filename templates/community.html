@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Hub - TidalTrees</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="container nav">
+            <a href="index.html" class="nav__logo">
+                <i class="fas fa-tree"></i> TidalTrees
+            </a>
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li><a href="{{ url_for('index') }}" class="nav__link">Home</a></li>
+                    <li><a href="{{ url_for('community') }}" class="nav__link active">Community</a></li>
+                    <li><a href="{{ url_for('reporting') }}" class="nav__link">Reporting</a></li>
+                    <li><a href="{{ url_for('ai_validation') }}" class="nav__link">AI Validation</a></li>
+                    <li><a href="{{ url_for('leaderboard') }}" class="nav__link">Leaderboard</a></li>
+                    <li><a href="{{ url_for('contact') }}" class="nav__link">Contact</a></li>
+                </ul>
+            </div>
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="section container">
+            <h1 class="section__title">Community Hub</h1>
+            <p class="section__subtitle">Connect with fellow guardians, share experiences, and collaborate on conservation efforts.</p>
+
+            <!-- Community Stats -->
+            <div class="stats community__stats">
+                <div class="card stat__card">
+                    <i class="fas fa-users"></i>
+                    <p class="stat__value">5,832</p>
+                    <p class="stat__label">Active Members</p>
+                </div>
+                <div class="card stat__card">
+                    <i class="fas fa-comments"></i>
+                    <p class="stat__value">1,247</p>
+                    <p class="stat__label">Discussions</p>
+                </div>
+                <div class="card stat__card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <p class="stat__value">23</p>
+                    <p class="stat__label">Events This Month</p>
+                </div>
+                <div class="card stat__card">
+                    <i class="fas fa-trophy"></i>
+                    <p class="stat__value">8,934</p>
+                    <p class="stat__label">Achievements Earned</p>
+                </div>
+            </div>
+
+            <!-- Main Community Grid -->
+            <div class="community__grid">
+                <!-- Community Feed -->
+                <div class="card community__feed">
+                    <h2 class="card__title">Community Feed</h2>
+                    <div class="feed__item">
+                        <div class="feed__avatar ms">MS</div>
+                        <div class="feed__content">
+                            <p class="feed__user">Maria Santos <span class="feed__time">5 hours ago</span> <span class="tag tag-success">Progress</span></p>
+                            <p class="feed__text">Great progress on the Sundarbans restoration project! We've planted 500 new mangrove saplings this week.</p>
+                            <div class="feed__actions">
+                                <span><i class="fas fa-heart"></i> 42</span>
+                                <span><i class="fas fa-comment"></i> 12</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feed__item">
+                        <div class="feed__avatar dc">DC</div>
+                        <div class="feed__content">
+                            <p class="feed__user">David Chen <span class="feed__time">8 hours ago</span> <span class="tag tag-danger">Urgent</span></p>
+                            <p class="feed__text">Urgent: Reporting illegal dumping near the Mahatma Gandhi Marine National Park. Need immediate community response!</p>
+                             <div class="feed__actions">
+                                <span><i class="fas fa-heart"></i> 28</span>
+                                <span><i class="fas fa-comment"></i> 8</span>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="feed__item">
+                        <div class="feed__avatar pp">PP</div>
+                        <div class="feed__content">
+                            <p class="feed__user">Priya Patel <span class="feed__time">16 hours ago</span></p>
+                            <p class="feed__text">Educational workshop this Saturday on mangrove conservation techniques. Who's joining?</p>
+                             <div class="feed__actions">
+                                <span><i class="fas fa-heart"></i> 15</span>
+                                <span><i class="fas fa-comment"></i> 3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Side Column -->
+                <div class="community__sidebar">
+                    <!-- Join CTA -->
+                    <div class="card cta-sidebar-card">
+                         <h2 class="cta__title">Ready to Become a Guardian?</h2>
+                         <p>Join our community of environmental protectors.</p>
+                         <a href="#" class="btn btn-primary" >Join as Guardian</a>
+                    </div>
+
+                    <!-- Upcoming Events -->
+                    <div class="card">
+                        <h2 class="card__title"><i class="fas fa-calendar-week"></i> Upcoming Events</h2>
+                        <div class="event__item">
+                            <p class="event__date">Dec 15</p>
+                            <p class="event__title">Mangrove Cleanup Drive</p>
+                            <p class="event__location">Mumbai Coast <span class="event__participants">45</span></p>
+                        </div>
+                         <div class="event__item">
+                            <p class="event__date">Dec 18</p>
+                            <p class="event__title">Conservation Workshop</p>
+                            <p class="event__location">Online <span class="event__participants">118</span></p>
+                        </div>
+                        <div class="event__item">
+                            <p class="event__date">Dec 22</p>
+                            <p class="event__title">Beach Restoration</p>
+                            <p class="event__location">Goa Beaches <span class="event__participants">67</span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Top Contributors -->
+                    <div class="card">
+                        <h2 class="card__title"><i class="fas fa-star"></i> Top Contributors</h2>
+                        <div class="contributor__item">
+                            <span>1.</span>
+                            <div class="feed__avatar rk">RK</div>
+                            <span>Raj Kumar</span>
+                            <span class="contributor__points">850 pts</span>
+                        </div>
+                        <div class="contributor__item">
+                            <span>2.</span>
+                             <div class="feed__avatar lw">LW</div>
+                            <span>Lisa Wong</span>
+                            <span class="contributor__points">800 pts</span>
+                        </div>
+                        <div class="contributor__item">
+                            <span>3.</span>
+                             <div class="feed__avatar ah">AH</div>
+                            <span>Ahmed Hassan</span>
+                            <span class="contributor__points">750 pts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer__content">
+            <p>&copy; 2025 TidalTrees. All rights reserved.</p>
+            <div class="footer__socials">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
+

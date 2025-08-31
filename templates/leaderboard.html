@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardian Leaderboard - TidalTrees</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="container nav">
+            <a href="index.html" class="nav__logo">
+                <i class="fas fa-tree"></i> TidalTrees
+            </a>
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                   <li><a href="{{ url_for('index') }}" class="nav__link">Home</a></li>
+                    <li><a href="{{ url_for('community') }}" class="nav__link">Community</a></li>
+                    <li><a href="{{ url_for('reporting') }}" class="nav__link">Reporting</a></li>
+                    <li><a href="{{ url_for('ai_validation') }}" class="nav__link">AI Validation</a></li>
+                    <li><a href="{{ url_for('leaderboard') }}" class="nav__link active">Leaderboard</a></li>
+                    <li><a href="{{ url_for('contact') }}" class="nav__link">Contact</a></li>
+                </ul>
+            </div>
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="section container">
+            <h1 class="section__title">Guardian Leaderboard</h1>
+            <p class="section__subtitle">Celebrating our environmental champions and their conservation efforts.</p>
+
+            <div class="leaderboard__grid">
+                <!-- Left Column: Rankings -->
+                <div class="leaderboard__main">
+                    <!-- Top Champions -->
+                    <div class="card champions-card">
+                        <h2 class="card__title"><i class="fas fa-crown"></i> Top Guardian Champions</h2>
+                        <div class="champions-podium">
+                            <!-- 2nd Place -->
+                            <div class="champion-podium__item place-2">
+                                <div class="champion__rank">2</div>
+                                <div class="feed__avatar lw">LW</div>
+                                <p class="champion__name">Lisa Wong</p>
+                                <p class="champion__location">Singapore</p>
+                                <p class="champion__points">2,854 pts</p>
+                            </div>
+                            <!-- 1st Place -->
+                             <div class="champion-podium__item place-1">
+                                <div class="champion__rank">1</div>
+                                <div class="feed__avatar rk">RK</div>
+                                <p class="champion__name">Raj Kumar</p>
+                                <p class="champion__location">Mumbai, India</p>
+                                <p class="champion__points">3,047 pts</p>
+                            </div>
+                            <!-- 3rd Place -->
+                             <div class="champion-podium__item place-3">
+                                <div class="champion__rank">3</div>
+                                <div class="feed__avatar ah">AH</div>
+                                <p class="champion__name">Ahmed Hassan</p>
+                                <p class="champion__location">Dubai, UAE</p>
+                                <p class="champion__points">2,489 pts</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rankings List -->
+                    <div class="card rankings-list-card">
+                         <h2 class="card__title">Rankings 4-10</h2>
+                         <ul class="rankings-list">
+                             <li class="rankings-list__item">
+                                 <span class="rankings__rank">4</span>
+                                 <div class="feed__avatar ms">MS</div>
+                                 <span class="rankings__name">Maria Santos</span>
+                                 <span class="rankings__details">Sao Paulo</span>
+                                 <span class="rankings__reports">94 reports</span>
+                                 <span class="rankings__points">2,158 pts</span>
+                             </li>
+                              <li class="rankings-list__item">
+                                 <span class="rankings__rank">5</span>
+                                 <div class="feed__avatar dc">DC</div>
+                                 <span class="rankings__name">David Chen</span>
+                                 <span class="rankings__details">Hong Kong</span>
+                                 <span class="rankings__reports">90 reports</span>
+                                 <span class="rankings__points">2,034 pts</span>
+                             </li>
+                              <li class="rankings-list__item">
+                                 <span class="rankings__rank">6</span>
+                                 <div class="feed__avatar pp">PP</div>
+                                 <span class="rankings__name">Priya Patel</span>
+                                 <span class="rankings__details">New Delhi</span>
+                                 <span class="rankings__reports">82 reports</span>
+                                 <span class="rankings__points">1,916 pts</span>
+                             </li>
+                             <!-- Add more list items as needed -->
+                         </ul>
+                    </div>
+                </div>
+
+                <!-- Right Column: Challenges & Progress -->
+                <div class="leaderboard__sidebar">
+                    <div class="card monthly-challenge-card">
+                        <h2 class="card__title">Monthly Challenge</h2>
+                        <p class="challenge__title">December Conservation Drive</p>
+                        <p class="challenge__description">Help protect 1000 acres of mangrove habitat.</p>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: 87%;"></div>
+                        </div>
+                        <p class="challenge__status">870/1000 acres</p>
+                        <div class="challenge__reward">
+                            <i class="fas fa-medal"></i>
+                            <div>
+                                <p><strong>Reward:</strong></p>
+                                <p>Habitat Guardian Badge + 1000 Bonus Points</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="card__title">Guardian Achievements</h2>
+                        <div class="achievement-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <div>
+                                <strong>Crown Protector</strong>
+                                <p>Submit 100+ validated reports</p>
+                            </div>
+                        </div>
+                         <div class="achievement-item">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <div>
+                                <strong>Report Master</strong>
+                                <p>Maintain >95% validation rate</p>
+                            </div>
+                        </div>
+                         <div class="achievement-item">
+                            <i class="fas fa-hands-helping"></i>
+                            <div>
+                                <strong>Community Leader</strong>
+                                <p>Help 10+ new guardians</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2 class="card__title">Your Progress</h2>
+                        <div class="user-progress">
+                             <div><span>Current Rank:</span> <strong>#87</strong></div>
+                             <div><span>Total Points:</span> <strong>1,654</strong></div>
+                             <div><span>Reports Submitted:</span> <strong>73</strong></div>
+                             <div><span>Validation Rate:</span> <strong>96%</strong></div>
+                             <div><span>Current Streak:</span> <strong>12 days</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer__content">
+            <p>&copy; 2025 TidalTrees. All rights reserved.</p>
+            <div class="footer__socials">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
