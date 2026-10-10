@@ -12,4 +12,5 @@
 | task-11 | Scaffold React frontend with Vite, Tailwind CSS v4, and API proxy | done |
 | task-12 | Setup Axios API client with JWT interceptors and endpoints | done |
 | task-13 | Create AuthContext and useAuth hook for state & token management | done |
+| task-14 | Setup React Router, ProtectedRoute wrapper, and page stubs | done |
 
