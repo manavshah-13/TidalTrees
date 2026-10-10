@@ -14,6 +14,7 @@ import {
 import { api } from '../api/client';
 import { useFilterStore } from '../store/useFilterStore';
 import type { Report, Guardian } from '../types';
+import { MapView } from '../components/MapView';
 
 export const Community: React.FC = () => {
   const {
@@ -131,6 +132,11 @@ export const Community: React.FC = () => {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Interactive Geospatial Telemetry Map */}
+      <div className="mb-10">
+        <MapView initialReports={reports} height="440px" />
       </div>
 
       {/* Incident Feed */}

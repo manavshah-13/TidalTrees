@@ -21,6 +21,9 @@ class Settings(BaseSettings):
     # Redis Cache
     redis_url: str = "redis://localhost:6379/0"
 
+    # AI Vision API
+    gemini_api_key: str = ""
+
     model_config = {"env_file": [".env", "../.env"], "extra": "ignore"}
 
 

@@ -9,6 +9,7 @@ class ReportCreate(BaseModel):
     latitude: float | None = None
     longitude: float | None = None
     severity: str = Field(..., pattern="^(low|medium|high|critical)$")
+    image_url: str | None = None
 
 
 class ReportResponse(BaseModel):

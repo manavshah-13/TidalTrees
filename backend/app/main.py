@@ -1,12 +1,10 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.config import get_settings
-<<<<<<< HEAD
-from app.routers import auth, leaderboard, reports, contact
-=======
-from app.routers import auth, reports
->>>>>>> 5ba0dc3fa90ac3dc07366ebc86c1aebe83062fd9
+from app.routers import auth, leaderboard, reports, contact, analyze
 
 settings = get_settings()
 
@@ -25,14 +23,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount uploads static files
+UPLOADS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "uploads")
+os.makedirs(UPLOADS_DIR, exist_ok=True)
+app.mount("/static/uploads", StaticFiles(directory=UPLOADS_DIR), name="uploads")
+
 app.include_router(auth.router)
-<<<<<<< HEAD
 app.include_router(leaderboard.router)
 app.include_router(reports.router)
 app.include_router(contact.router)
-=======
-app.include_router(reports.router)
->>>>>>> 5ba0dc3fa90ac3dc07366ebc86c1aebe83062fd9
+app.include_router(analyze.router)
 
 
 @app.get("/health")

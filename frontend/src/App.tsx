@@ -5,6 +5,7 @@ import { Dashboard } from './pages/Dashboard';
 import { Community } from './pages/Community';
 import { Leaderboard } from './pages/Leaderboard';
 import { Contact } from './pages/Contact';
+import { AiValidation } from './pages/AiValidation';
 import { MultiStepReportModal } from './components/reports/MultiStepReportModal';
 import { AuthModal } from './components/auth/AuthModal';
 import { useAuthStore } from './store/useAuthStore';
@@ -73,6 +74,9 @@ export const App: React.FC = () => {
           />
         )}
         {activeTab === 'community' && <Community />}
+        {activeTab === 'ai-validation' && (
+          <AiValidation onOpenReportModal={() => setIsReportModalOpen(true)} />
+        )}
         {activeTab === 'leaderboard' && <Leaderboard />}
         {activeTab === 'contact' && <Contact />}
       </main>

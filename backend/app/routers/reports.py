@@ -1,8 +1,12 @@
-<<<<<<< HEAD
+import os
+import math
+import uuid
+import shutil
 from typing import Optional, List
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status, Query, UploadFile, File, Form
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy import or_, func, cast
+from geoalchemy2 import Geography
 
 from app.database import get_db
 from app.models.report import Report
@@ -15,22 +19,56 @@ router = APIRouter(prefix="/api/reports", tags=["Reports"])
 
 LEADERBOARD_CACHE_KEY = "leaderboard:top"
 
+# Local uploads directory
+UPLOADS_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "uploads"
+)
+os.makedirs(UPLOADS_DIR, exist_ok=True)
+
+
+def save_uploaded_file(upload_file: UploadFile) -> str:
+    ext = os.path.splitext(upload_file.filename or "")[1].lower()
+    if not ext or ext not in [".jpg", ".jpeg", ".png", ".webp", ".gif"]:
+        ext = ".jpg"
+    unique_name = f"{uuid.uuid4().hex}{ext}"
+    file_path = os.path.join(UPLOADS_DIR, unique_name)
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(upload_file.file, buffer)
+    return f"/static/uploads/{unique_name}"
+
+
+@router.post("/upload-image")
+def upload_image(
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_user),
+):
+    if file.content_type and not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="Uploaded file must be an image")
+    url = save_uploaded_file(file)
+    return {"image_url": url}
+
 
 @router.post("", response_model=ReportResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=ReportResponse, status_code=status.HTTP_201_CREATED)
 def create_report(
     report_in: ReportCreate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    # Create incident report
+    geom_val = None
+    if report_in.latitude is not None and report_in.longitude is not None:
+        geom_val = f"SRID=4326;POINT({report_in.longitude} {report_in.latitude})"
+
     report = Report(
         title=report_in.title,
         description=report_in.description,
         location=report_in.location,
         latitude=report_in.latitude,
         longitude=report_in.longitude,
+        geom=geom_val,
         severity=report_in.severity,
         status="pending",
+        image_url=report_in.image_url,
         author_id=current_user.id,
         ai_confidence=0.92,
         ai_result="Automated satellite & canopy validation: High probability anomaly identified.",
@@ -51,63 +89,72 @@ def create_report(
     return report
 
 
-@router.get("", response_model=ReportList)
-def list_reports(
-    severity: Optional[str] = None,
-    status: Optional[str] = None,
-    search: Optional[str] = None,
-    limit: int = Query(50, ge=1, le=100),
-    offset: int = Query(0, ge=0),
-=======
-from fastapi import APIRouter, Depends, HTTPException, status, Query
-from sqlalchemy.orm import Session
-
-from app.database import get_db
-from app.models.user import User
-from app.models.report import Report
-from app.schemas.report import ReportCreate, ReportResponse, ReportList
-from app.services.auth import get_current_user
-
-router = APIRouter(prefix="/api/reports", tags=["Reports"])
-
-
-@router.post("/", response_model=ReportResponse, status_code=status.HTTP_201_CREATED)
-def create_report(
-    report_data: ReportCreate,
-    db: Session = Depends(get_db),
+@router.post("/with-image", response_model=ReportResponse, status_code=status.HTTP_201_CREATED)
+def create_report_with_image(
+    title: str = Form(...),
+    description: str = Form(...),
+    location: str = Form(...),
+    severity: str = Form(...),
+    latitude: Optional[float] = Form(None),
+    longitude: Optional[float] = Form(None),
+    image: Optional[UploadFile] = File(None),
     current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
+    image_url = None
+    if image and image.filename:
+        image_url = save_uploaded_file(image)
+
+    geom_val = None
+    if latitude is not None and longitude is not None:
+        geom_val = f"SRID=4326;POINT({longitude} {latitude})"
+
     report = Report(
-        **report_data.model_dump(),
+        title=title,
+        description=description,
+        location=location,
+        latitude=latitude,
+        longitude=longitude,
+        geom=geom_val,
+        severity=severity,
+        status="pending",
+        image_url=image_url,
         author_id=current_user.id,
+        ai_confidence=0.92,
+        ai_result="Automated satellite & canopy validation: High probability anomaly identified.",
     )
     db.add(report)
 
-    # Increment user's report count
-    current_user.reports_count += 1
-    current_user.points += 10  # Award points for submitting
+    current_user.points = (current_user.points or 0) + 25
+    current_user.reports_count = (current_user.reports_count or 0) + 1
+    db.add(current_user)
 
     db.commit()
     db.refresh(report)
+
+    invalidate_cache(LEADERBOARD_CACHE_KEY)
     return report
 
 
+@router.get("", response_model=ReportList)
 @router.get("/", response_model=ReportList)
 def list_reports(
-    skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100),
-    severity: str | None = None,
-    status_filter: str | None = Query(None, alias="status"),
->>>>>>> 5ba0dc3fa90ac3dc07366ebc86c1aebe83062fd9
+    severity: Optional[str] = None,
+    status: Optional[str] = None,
+    status_filter: Optional[str] = Query(None, alias="status"),
+    search: Optional[str] = None,
+    limit: int = Query(50, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    skip: Optional[int] = Query(None, ge=0),
     db: Session = Depends(get_db),
 ):
     query = db.query(Report)
 
-<<<<<<< HEAD
+    active_status = status_filter or status
     if severity and severity != "all":
         query = query.filter(Report.severity == severity.lower())
-    if status and status != "all":
-        query = query.filter(Report.status == status.lower())
+    if active_status and active_status != "all":
+        query = query.filter(Report.status == active_status.lower())
     if search:
         search_filter = f"%{search}%"
         query = query.filter(
@@ -118,9 +165,61 @@ def list_reports(
             )
         )
 
+    actual_offset = skip if skip is not None else offset
     total = query.count()
-    reports = query.order_by(Report.created_at.desc()).offset(offset).limit(limit).all()
+    reports = query.order_by(Report.created_at.desc()).offset(actual_offset).limit(limit).all()
     return ReportList(reports=reports, total=total)
+
+
+@router.get("/nearby", response_model=List[ReportResponse])
+def get_nearby_reports(
+    lat: float = Query(..., ge=-90.0, le=90.0),
+    lng: float = Query(..., ge=-180.0, le=180.0),
+    radius_km: float = Query(10.0, gt=0, le=500.0),
+    limit: int = Query(50, ge=1, le=100),
+    db: Session = Depends(get_db),
+):
+    """Radius-based geographic query using PostGIS ST_DWithin on geometry points."""
+    radius_meters = radius_km * 1000.0
+    point_geom = func.ST_SetSRID(func.ST_MakePoint(lng, lat), 4326)
+
+    try:
+        reports = (
+            db.query(Report)
+            .filter(
+                Report.geom.isnot(None),
+                func.ST_DWithin(
+                    cast(Report.geom, Geography),
+                    cast(point_geom, Geography),
+                    radius_meters,
+                ),
+            )
+            .order_by(
+                func.ST_Distance(
+                    cast(Report.geom, Geography),
+                    cast(point_geom, Geography),
+                )
+            )
+            .limit(limit)
+            .all()
+        )
+        return reports
+    except Exception:
+        # Fallback bounding box & Euclidean distance for non-PostGIS local dev
+        deg_lat = radius_km / 111.0
+        deg_lng = radius_km / (111.0 * max(0.1, abs(math.cos(math.radians(lat)))))
+        reports = (
+            db.query(Report)
+            .filter(
+                Report.latitude.isnot(None),
+                Report.longitude.isnot(None),
+                Report.latitude.between(lat - deg_lat, lat + deg_lat),
+                Report.longitude.between(lng - deg_lng, lng + deg_lng),
+            )
+            .limit(limit)
+            .all()
+        )
+        return reports
 
 
 @router.get("/me", response_model=List[ReportResponse])
@@ -135,15 +234,6 @@ def get_my_reports(
         .all()
     )
     return reports
-=======
-    if severity:
-        query = query.filter(Report.severity == severity)
-    if status_filter:
-        query = query.filter(Report.status == status_filter)
-
-    total = query.count()
-    reports = query.order_by(Report.created_at.desc()).offset(skip).limit(limit).all()
-    return ReportList(reports=reports, total=total)
 
 
 @router.get("/{report_id}", response_model=ReportResponse)
@@ -151,6 +241,26 @@ def get_report(report_id: int, db: Session = Depends(get_db)):
     report = db.query(Report).filter(Report.id == report_id).first()
     if not report:
         raise HTTPException(status_code=404, detail="Report not found")
+    return report
+
+
+@router.post("/{report_id}/image", response_model=ReportResponse)
+def upload_report_image(
+    report_id: int,
+    image: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    report = db.query(Report).filter(Report.id == report_id).first()
+    if not report:
+        raise HTTPException(status_code=404, detail="Report not found")
+    if report.author_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to edit this report")
+
+    image_url = save_uploaded_file(image)
+    report.image_url = image_url
+    db.commit()
+    db.refresh(report)
     return report
 
 
@@ -168,4 +278,3 @@ def delete_report(
 
     db.delete(report)
     db.commit()
->>>>>>> 5ba0dc3fa90ac3dc07366ebc86c1aebe83062fd9

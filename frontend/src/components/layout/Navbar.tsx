@@ -9,6 +9,7 @@ import {
   LogOut,
   LogIn,
   Award,
+  Sparkles,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 
@@ -30,6 +31,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'community', label: 'Community', icon: Users },
+    { id: 'ai-validation', label: 'AI Validation', icon: Sparkles },
     { id: 'leaderboard', label: 'Leaderboard', icon: Trophy },
     { id: 'contact', label: 'Contact', icon: Mail },
   ];

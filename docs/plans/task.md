@@ -1,10 +1,9 @@
+# Task Tracker — Phase 2: AI, Geospatial & UI Integration
+
 | Task ID | Task Description | Status |
 |---|---|---|
-| task-2 | Setup Docker Compose and PostgreSQL configuration | done |
-| task-3 | Scaffold FastAPI backend, environment config, CORS, and health check | done |
-| task-4 | Setup SQLAlchemy database engine, session, Base, get_db dependency, and verify connectivity | done |
-| task-5 | Create SQLAlchemy models (User, Report, Guardian, ContactMessage) and relationships | done |
-| task-6 | Initialize Alembic, configure env.py, generate and apply initial baseline migrations | done |
-| task-7 | Define Pydantic v2 schemas for auth, user, and incident reports | done |
-| task-8 | Implement authentication service (bcrypt, JWT, get_current_user dependency) | done |
-| task-9 | Implement authentication router (/register, /login, /me) and mount to FastAPI app | done |
+| task-p2-1 | Image Storage Backend (Local Volume, StaticFiles, UploadFile) | done |
+| task-p2-2 | Vision API Integration (Gemini Generative AI, /api/analyze endpoint) | done |
+| task-p2-3 | PostGIS & Geospatial Queries (postgis image, GeoAlchemy2, ST_DWithin /api/reports/nearby) | done |
+| task-p2-4 | Map UI (React-Leaflet, MapView component, integration into Dashboard/Community) | done |
+| task-p2-5 | AI Validation Page UI (Drag-and-drop upload, /api/analyze call, results display) | done |
