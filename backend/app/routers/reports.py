@@ -105,6 +105,17 @@ def create_report_with_image(
     if image and image.filename:
         image_url = save_uploaded_file(image)
 
+    if latitude is not None and not (-90.0 <= latitude <= 90.0):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Latitude must be between -90.0 and 90.0 degrees",
+        )
+    if longitude is not None and not (-180.0 <= longitude <= 180.0):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Longitude must be between -180.0 and 180.0 degrees",
+        )
+
     geom_val = None
     if latitude is not None and longitude is not None:
         geom_val = f"SRID=4326;POINT({longitude} {latitude})"

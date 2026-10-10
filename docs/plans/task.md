@@ -1,9 +1,7 @@
-# Task Tracker — Phase 2: AI, Geospatial & UI Integration
+# Task Tracker — Phase 3: Hardening, Testing & Documentation
 
 | Task ID | Task Description | Status |
 |---|---|---|
-| task-p2-1 | Image Storage Backend (Local Volume, StaticFiles, UploadFile) | done |
-| task-p2-2 | Vision API Integration (Gemini Generative AI, /api/analyze endpoint) | done |
-| task-p2-3 | PostGIS & Geospatial Queries (postgis image, GeoAlchemy2, ST_DWithin /api/reports/nearby) | done |
-| task-p2-4 | Map UI (React-Leaflet, MapView component, integration into Dashboard/Community) | done |
-| task-p2-5 | AI Validation Page UI (Drag-and-drop upload, /api/analyze call, results display) | done |
+| task-p3-1 | Strict Data Validation & Sanitization (Geographic bounds, AI prompt injection defense, 422 handling) | done |
+| task-p3-2 | Backend Testing Suite (Pytest fixtures, auth, reports, analyze mock, >70% coverage) | in_progress |
+| task-p3-3 | Project Documentation (README.md, Getting Started, Database Architecture with Mermaid, AI Pipeline) | not_started |
