@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Trees,
   PlusCircle,
@@ -10,6 +10,8 @@ import {
   LogIn,
   Award,
   Sparkles,
+  Menu,
+  X,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 
@@ -27,6 +29,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAuthModal,
 }) => {
   const { isAuthenticated, user, logout } = useAuthStore();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -42,7 +45,10 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Brand */}
         <div
           className="navbar-brand cursor-pointer flex items-center gap-2.5"
-          onClick={() => setActiveTab('dashboard')}
+          onClick={() => {
+            setActiveTab('dashboard');
+            setIsMobileMenuOpen(false);
+          }}
         >
           <div className="brand-logo-glow">
             <Trees className="w-6 h-6 text-emerald-400" />
@@ -53,7 +59,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
 
-        {/* Navigation Tabs */}
+        {/* Navigation Tabs (Desktop) */}
         <nav className="navbar-links">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -72,11 +78,11 @@ export const Navbar: React.FC<NavbarProps> = ({
         </nav>
 
         {/* Right CTA Actions */}
-        <div className="navbar-actions">
-          {/* Quick Report CTA */}
+        <div className="navbar-actions flex items-center gap-2.5">
+          {/* Quick Report CTA (Desktop & Tablet) */}
           <button
             onClick={onOpenReportModal}
-            className="btn-report-cta flex items-center gap-1.5"
+            className="btn-report-cta hidden sm:flex items-center gap-1.5"
           >
             <PlusCircle className="w-4 h-4" />
             <span>Report Incident</span>
@@ -116,8 +122,62 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span>Sign In</span>
             </button>
           )}
+
+          {/* Mobile Hamburger Toggle */}
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle navigation menu"
+            className="md:hidden p-2 text-gray-300 hover:text-white rounded-lg hover:bg-emerald-950/40 border border-emerald-500/20"
+          >
+            {isMobileMenuOpen ? (
+              <X className="w-5 h-5 text-emerald-400" />
+            ) : (
+              <Menu className="w-5 h-5 text-emerald-400" />
+            )}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Drawer Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden border-t border-emerald-500/20 bg-[#041014]/95 backdrop-blur-md px-4 py-3 space-y-1.5 shadow-2xl">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = activeTab === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => {
+                  setActiveTab(item.id);
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                  isActive
+                    ? 'text-emerald-400 bg-emerald-950/60 border border-emerald-500/30'
+                    : 'text-gray-300 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                <Icon className="w-4 h-4 text-emerald-400" />
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+
+          <div className="pt-2 border-t border-gray-800 flex flex-col gap-2">
+            <button
+              onClick={() => {
+                onOpenReportModal();
+                setIsMobileMenuOpen(false);
+              }}
+              className="w-full btn-report-cta flex items-center justify-center gap-2 py-2.5 text-sm"
+            >
+              <PlusCircle className="w-4 h-4" />
+              <span>Report Incident</span>
+            </button>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

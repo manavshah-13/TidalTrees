@@ -1,9 +1,10 @@
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, EmailStr
 
 from app.database import get_db
+from app.limiter import limiter
 from app.models.contact import ContactMessage
 from app.models.guardian import Guardian
 
@@ -27,7 +28,9 @@ class GuardianResponse(BaseModel):
 
 
 @router.post("/contact", status_code=status.HTTP_201_CREATED)
+@limiter.limit("5/minute")
 def submit_contact(
+    request: Request,
     msg: ContactCreate,
     db: Session = Depends(get_db),
 ):

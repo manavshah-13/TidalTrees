@@ -2,8 +2,11 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
 from app.config import get_settings
+from app.limiter import limiter
 from app.routers import auth, leaderboard, reports, contact, analyze
 
 settings = get_settings()
@@ -13,6 +16,10 @@ app = FastAPI(
     description="Mangrove conservation monitoring platform API",
     version="1.0.0",
 )
+
+# Attach rate limiter
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # CORS — allow React dev server
 app.add_middleware(

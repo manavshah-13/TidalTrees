@@ -1,9 +1,8 @@
-# Task Tracker — Phase 2: AI, Geospatial & UI Integration
+# Task Tracker — Phase 3: Production Readiness, Security & CI/CD
 
 | Task ID | Task Description | Status |
 |---|---|---|
-| task-p2-1 | Image Storage Backend (Local Volume, StaticFiles, UploadFile) | done |
-| task-p2-2 | Vision API Integration (Gemini Generative AI, /api/analyze endpoint) | done |
-| task-p2-3 | PostGIS & Geospatial Queries (postgis image, GeoAlchemy2, ST_DWithin /api/reports/nearby) | done |
-| task-p2-4 | Map UI (React-Leaflet, MapView component, integration into Dashboard/Community) | done |
-| task-p2-5 | AI Validation Page UI (Drag-and-drop upload, /api/analyze call, results display) | done |
+| task-prod-1 | Security & Rate Limiting (SlowAPI) on contact and report submission endpoints | done |
+| task-prod-2 | Frontend Testing & QA (Vitest + RTL) and mobile-first responsive design audit | done |
+| task-prod-3 | CI/CD Pipeline (GitHub Actions workflow for automated testing and linting) | done |
+| task-prod-4 | Production Deployment Configurations (Dockerfile, Render blueprint, Vercel SPA) | done |
