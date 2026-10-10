@@ -14,4 +14,5 @@
 | task-13 | Create AuthContext and useAuth hook for state & token management | done |
 | task-14 | Setup React Router, ProtectedRoute wrapper, and page stubs | done |
 | task-15 | Create Navbar, Footer, and Layout components with responsive styles | done |
+| task-16 | Implement Login and Register pages wired up with auth API and validation | done |
 
