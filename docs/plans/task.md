@@ -7,3 +7,4 @@
 | task-6 | Initialize Alembic, configure env.py, generate and apply initial baseline migrations | done |
 | task-7 | Define Pydantic v2 schemas for auth, user, and incident reports | done |
 | task-8 | Implement authentication service (bcrypt, JWT, get_current_user dependency) | done |
+| task-9 | Implement authentication router (/register, /login, /me) and mount to FastAPI app | done |
