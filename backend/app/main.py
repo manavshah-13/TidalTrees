@@ -2,7 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
+<<<<<<< HEAD
 from app.routers import auth, leaderboard, reports, contact
+=======
+from app.routers import auth, reports
+>>>>>>> 5ba0dc3fa90ac3dc07366ebc86c1aebe83062fd9
 
 settings = get_settings()
 
@@ -22,9 +26,13 @@ app.add_middleware(
 )
 
 app.include_router(auth.router)
+<<<<<<< HEAD
 app.include_router(leaderboard.router)
 app.include_router(reports.router)
 app.include_router(contact.router)
+=======
+app.include_router(reports.router)
+>>>>>>> 5ba0dc3fa90ac3dc07366ebc86c1aebe83062fd9
 
 
 @app.get("/health")

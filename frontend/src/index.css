@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* TidalTrees Coastal Design System */
 :root {
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
@@ -780,3 +781,6 @@ body {
   from { transform: scale(0.96); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
+=======
+@import "tailwindcss";
+>>>>>>> 5ba0dc3fa90ac3dc07366ebc86c1aebe83062fd9
