@@ -3,12 +3,13 @@ import math
 import uuid
 import shutil
 from typing import Optional, List
-from fastapi import APIRouter, Depends, HTTPException, status, Query, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, status, Query, UploadFile, File, Form, Request
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, func, cast
 from geoalchemy2 import Geography
 
 from app.database import get_db
+from app.limiter import limiter
 from app.models.report import Report
 from app.models.user import User
 from app.schemas.report import ReportCreate, ReportResponse, ReportList
@@ -50,7 +51,9 @@ def upload_image(
 
 @router.post("", response_model=ReportResponse, status_code=status.HTTP_201_CREATED)
 @router.post("/", response_model=ReportResponse, status_code=status.HTTP_201_CREATED)
+@limiter.limit("10/minute")
 def create_report(
+    request: Request,
     report_in: ReportCreate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
