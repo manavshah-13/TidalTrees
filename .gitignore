@@ -233,4 +233,10 @@ env/
 # Python cache
 __pycache__/
 *.py[cod]
-*$py.class
+*$py.class
+
+# Node / Frontend
+node_modules/
+dist/
+.vite/
+

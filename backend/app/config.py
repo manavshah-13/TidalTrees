@@ -18,7 +18,10 @@ class Settings(BaseSettings):
     # CORS
     frontend_url: str = "http://localhost:5173"
 
-    model_config = {"env_file": "../.env", "extra": "ignore"}
+    # Redis Cache
+    redis_url: str = "redis://localhost:6379/0"
+
+    model_config = {"env_file": [".env", "../.env"], "extra": "ignore"}
 
 
 @lru_cache()
