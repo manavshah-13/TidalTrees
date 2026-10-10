@@ -11,4 +11,5 @@
 | task-10 | Implement reports CRUD router with filtering and pagination, mount to FastAPI app | done |
 | task-11 | Scaffold React frontend with Vite, Tailwind CSS v4, and API proxy | done |
 | task-12 | Setup Axios API client with JWT interceptors and endpoints | done |
+| task-13 | Create AuthContext and useAuth hook for state & token management | done |
 
