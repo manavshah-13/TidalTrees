@@ -10,4 +10,5 @@
 | task-9 | Implement authentication router (/register, /login, /me) and mount to FastAPI app | done |
 | task-10 | Implement reports CRUD router with filtering and pagination, mount to FastAPI app | done |
 | task-11 | Scaffold React frontend with Vite, Tailwind CSS v4, and API proxy | done |
+| task-12 | Setup Axios API client with JWT interceptors and endpoints | done |
 
