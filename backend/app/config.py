@@ -24,6 +24,10 @@ class Settings(BaseSettings):
     # AI Vision API
     gemini_api_key: str = ""
 
+    # Supabase Cloud Storage
+    supabase_url: str = ""
+    supabase_key: str = ""
+
     model_config = {"env_file": [".env", "../.env"], "extra": "ignore"}
 
 

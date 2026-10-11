@@ -2,12 +2,15 @@ import os
 import math
 import uuid
 import shutil
+import logging
 from typing import Optional, List
 from fastapi import APIRouter, Depends, HTTPException, status, Query, UploadFile, File, Form, Request
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, func, cast
 from geoalchemy2 import Geography
+from supabase import create_client, Client
 
+from app.config import get_settings
 from app.database import get_db
 from app.limiter import limiter
 from app.models.report import Report
@@ -15,6 +18,9 @@ from app.models.user import User
 from app.schemas.report import ReportCreate, ReportResponse, ReportList
 from app.services.auth import get_current_user
 from app.services.cache import invalidate_cache
+
+logger = logging.getLogger(__name__)
+settings = get_settings()
 
 router = APIRouter(prefix="/api/reports", tags=["Reports"])
 
@@ -27,13 +33,46 @@ UPLOADS_DIR = os.path.join(
 os.makedirs(UPLOADS_DIR, exist_ok=True)
 
 
+def get_supabase_client() -> Optional[Client]:
+    """Initializes and returns Supabase client if credentials are configured."""
+    if settings.supabase_url and settings.supabase_key:
+        try:
+            return create_client(settings.supabase_url, settings.supabase_key)
+        except Exception as e:
+            logger.warning("Failed to initialize Supabase client: %s", e)
+    return None
+
+
 def save_uploaded_file(upload_file: UploadFile) -> str:
     ext = os.path.splitext(upload_file.filename or "")[1].lower()
     if not ext or ext not in [".jpg", ".jpeg", ".png", ".webp", ".gif"]:
         ext = ".jpg"
     unique_name = f"{uuid.uuid4().hex}{ext}"
+
+    # 1. Permanent Cloud Storage: Upload to Supabase Storage bucket 'reports'
+    supabase_client = get_supabase_client()
+    if supabase_client:
+        try:
+            upload_file.file.seek(0)
+            file_bytes = upload_file.file.read()
+            mime_type = upload_file.content_type or "image/jpeg"
+            supabase_client.storage.from_("reports").upload(
+                path=unique_name,
+                file=file_bytes,
+                file_options={"content-type": mime_type},
+            )
+            public_url = supabase_client.storage.from_("reports").get_public_url(unique_name)
+            upload_file.file.seek(0)
+            logger.info("Successfully uploaded image to Supabase Storage: %s", public_url)
+            return public_url
+        except Exception as e:
+            logger.warning("Supabase upload failed, falling back to local storage: %s", e)
+            upload_file.file.seek(0)
+
+    # 2. Local volume fallback (for local dev / offline tests)
     file_path = os.path.join(UPLOADS_DIR, unique_name)
     with open(file_path, "wb") as buffer:
+        upload_file.file.seek(0)
         shutil.copyfileobj(upload_file.file, buffer)
     return f"/static/uploads/{unique_name}"
 

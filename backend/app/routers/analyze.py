@@ -101,7 +101,25 @@ def save_upload(upload_file: UploadFile, ext: str) -> tuple[str, str]:
     with open(file_path, "wb") as buffer:
         upload_file.file.seek(0)
         shutil.copyfileobj(upload_file.file, buffer)
-    return f"/static/uploads/{unique_name}", file_path
+
+    image_url = f"/static/uploads/{unique_name}"
+    if settings.supabase_url and settings.supabase_key:
+        try:
+            from supabase import create_client
+            supabase_client = create_client(settings.supabase_url, settings.supabase_key)
+            with open(file_path, "rb") as f:
+                file_bytes = f.read()
+            mime_type = upload_file.content_type or "image/jpeg"
+            supabase_client.storage.from_("reports").upload(
+                path=unique_name,
+                file=file_bytes,
+                file_options={"content-type": mime_type},
+            )
+            image_url = supabase_client.storage.from_("reports").get_public_url(unique_name)
+        except Exception as e:
+            logger.warning("Supabase storage upload in analyze failed: %s", e)
+
+    return image_url, file_path
 
 
 @router.post("", response_model=AnalysisResult)

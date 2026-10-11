@@ -15,6 +15,7 @@ import {
 import { api } from '../api/client';
 import { useAuthStore } from '../store/useAuthStore';
 import type { Report } from '../types';
+import { MapView } from '../components/MapView';
 
 interface DashboardProps {
   onOpenReportModal: () => void;
@@ -146,6 +147,24 @@ export const Dashboard: React.FC<DashboardProps> = ({
             <div className="stat-value text-amber-400">96.4%</div>
             <div className="stat-subtext">Spectral satellite confidence</div>
           </div>
+        </div>
+      </div>
+
+      {/* Interactive Telemetry Map */}
+      <div className="mt-8">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-emerald-400" />
+              <span>Coastal Telemetry & Spatial Incident Map</span>
+            </h2>
+            <p className="text-xs text-gray-400 mt-0.5">
+              Live spatial coordinates of mangrove threats and field observations
+            </p>
+          </div>
+        </div>
+        <div className="rounded-2xl overflow-hidden border border-emerald-500/20 shadow-2xl bg-[#031317]">
+          <MapView height="380px" />
         </div>
       </div>
 
