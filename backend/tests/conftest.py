@@ -49,11 +49,14 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_test_environment():
-    """Sets required dummy environment variables for tests."""
+    """Sets required dummy environment variables for tests and disables limiter during functional tests."""
     os.environ["SECRET_KEY"] = "test-secret-key-for-pytest-32charslong!"
     os.environ["DATABASE_URL"] = "sqlite:///:memory:"
     os.environ["REDIS_URL"] = "redis://localhost:6379/0"
+    from app.limiter import limiter
+    limiter.enabled = False
     yield
+    limiter.enabled = True
 
 
 @pytest.fixture(scope="function")

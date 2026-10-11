@@ -5,10 +5,11 @@ import uuid
 import shutil
 import logging
 from typing import List, Optional
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException, status
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException, status, Request
 from pydantic import BaseModel, Field
 
 from app.config import get_settings
+from app.limiter import limiter
 
 logger = logging.getLogger(__name__)
 settings = get_settings()
@@ -105,7 +106,9 @@ def save_upload(upload_file: UploadFile, ext: str) -> tuple[str, str]:
 
 @router.post("", response_model=AnalysisResult)
 @router.post("/", response_model=AnalysisResult)
+@limiter.limit("5/minute")
 async def analyze_image(
+    request: Request,
     file: UploadFile = File(...),
     context: Optional[str] = Form(None),
 ):

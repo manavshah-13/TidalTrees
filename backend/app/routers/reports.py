@@ -39,7 +39,9 @@ def save_uploaded_file(upload_file: UploadFile) -> str:
 
 
 @router.post("/upload-image")
+@limiter.limit("5/minute")
 def upload_image(
+    request: Request,
     file: UploadFile = File(...),
     current_user: User = Depends(get_current_user),
 ):
@@ -93,7 +95,9 @@ def create_report(
 
 
 @router.post("/with-image", response_model=ReportResponse, status_code=status.HTTP_201_CREATED)
+@limiter.limit("5/minute")
 def create_report_with_image(
+    request: Request,
     title: str = Form(...),
     description: str = Form(...),
     location: str = Form(...),
