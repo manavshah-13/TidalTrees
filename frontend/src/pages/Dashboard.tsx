@@ -12,7 +12,6 @@ import {
   Clock,
   ShieldCheck,
   ChevronDown,
-  Navigation,
   Compass,
   ArrowRight,
 } from 'lucide-react';
@@ -209,7 +208,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
 
           <div
-            onClick={() => scrollToSection('dashboard-map')}
+            onClick={() => scrollToSection('map-section')}
             className="quick-action-card"
           >
             <div className="quick-action-icon bg-teal-500/10 border border-teal-500/30 text-teal-400">
@@ -317,7 +316,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
         </div>
 
         {/* 3. Live Map Section with Glassmorphic Overlays */}
-        <div className="mt-8 reveal reveal-delay-1 mb-12" id="dashboard-map">
+        <div className="mt-8 reveal reveal-delay-1 mb-12" id="map-section">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-xl font-bold text-white flex items-center gap-2">
@@ -325,30 +324,12 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 <span>Coastal Telemetry & Spatial Incident Map</span>
               </h3>
               <p className="text-xs text-gray-400 mt-0.5">
-                Live spatial coordinates of mangrove threats and field observations
+                Live spatial coordinates of mangrove threats, automated cluster groups, and delta observations
               </p>
             </div>
           </div>
 
-          <div className="relative rounded-2xl overflow-hidden border border-emerald-500/20 shadow-2xl bg-[#031317]">
-            <MapView height="420px" />
-
-            {/* Glassmorphic Stats Overlays */}
-            <div className="absolute top-4 left-4 z-10 flex flex-wrap gap-2.5 pointer-events-none">
-              <div className="map-glass-badge flex items-center gap-2 pointer-events-auto">
-                <div className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping" />
-                <span className="text-xs font-semibold text-white">Threat Hotspots: <span className="text-rose-400 font-mono">14 Active</span></span>
-              </div>
-              <div className="map-glass-badge flex items-center gap-2 pointer-events-auto">
-                <Navigation className="w-3.5 h-3.5 text-cyan-400" />
-                <span className="text-xs font-semibold text-white">Patrol Routes: <span className="text-cyan-400 font-mono">8 Live</span></span>
-              </div>
-              <div className="map-glass-badge flex items-center gap-2 pointer-events-auto">
-                <Trees className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-xs font-semibold text-white">Canopy Health: <span className="text-emerald-400 font-mono">94.2%</span></span>
-              </div>
-            </div>
-          </div>
+          <MapView fullWidth />
         </div>
 
         {/* 4. My Reports Grid with Staggered Reveal and Skeleton Loading */}

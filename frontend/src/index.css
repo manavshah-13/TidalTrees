@@ -1603,6 +1603,131 @@ body {
   animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* ==========================================================================
+   Phase F: Immersive Full-Width Map & Custom Pulsing Markers
+   ========================================================================== */
+
+.map-section-fullwidth {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  height: 65vh;
+  min-height: 520px;
+  overflow: hidden;
+}
+
+.map-overlay-panel {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  z-index: 1000;
+  background: rgba(4, 13, 16, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  max-width: 320px;
+  width: calc(100% - 2.5rem);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Custom Pulsing Leaflet Markers */
+.custom-map-pin {
+  background: transparent !important;
+  border: none !important;
+}
+
+.marker-pulse-wrapper {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marker-core {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+.marker-ping {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  opacity: 0.75;
+  animation: pingAnimation 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes pingAnimation {
+  75%, 100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* Severity Marker Tints */
+.marker-severity-critical .marker-core { background-color: #ef4444; }
+.marker-severity-critical .marker-ping { background-color: #ef4444; }
+
+.marker-severity-high .marker-core { background-color: #f97316; }
+.marker-severity-high .marker-ping { background-color: #f97316; }
+
+.marker-severity-medium .marker-core { background-color: #eab308; }
+.marker-severity-medium .marker-ping { background-color: #eab308; }
+
+.marker-severity-low .marker-core { background-color: #10b981; }
+.marker-severity-low .marker-ping { background-color: #10b981; }
+
+/* Custom Dark Leaflet Popup */
+.leaflet-popup-content-wrapper {
+  background: rgba(4, 13, 16, 0.95) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+  border-radius: 0.75rem !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7) !important;
+  padding: 0.25rem !important;
+}
+
+.leaflet-popup-tip {
+  background: rgba(4, 13, 16, 0.95) !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+/* Custom Marker Cluster Oceanic Styling */
+.marker-cluster-small {
+  background-color: rgba(16, 185, 129, 0.25) !important;
+}
+.marker-cluster-small div {
+  background-color: rgba(16, 185, 129, 0.85) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+.marker-cluster-medium {
+  background-color: rgba(6, 182, 212, 0.25) !important;
+}
+.marker-cluster-medium div {
+  background-color: rgba(6, 182, 212, 0.85) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+.marker-cluster-large {
+  background-color: rgba(244, 63, 94, 0.25) !important;
+}
+.marker-cluster-large div {
+  background-color: rgba(244, 63, 94, 0.85) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+
 
 
 

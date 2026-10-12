@@ -18,3 +18,4 @@
 | task-c5 | Task C5: Contact Page Premium Form & Social Proof (Floating Inputs, Feedback State, Partner Section) | done |
 | task-phase-d | Phase D: Navigation & Layout Overhaul (Scroll Navbar, Active Indicator, Drawer, 4-Col Footer) | done |
 | task-phase-e | Phase E: Micro-Interactions & Delight (Button Sweep, 3D Cards, Skeleton Suite, Page Crossfade) | done |
+| task-phase-f | Phase F: Map Integration Redesign (Edge-to-Edge Map, Pulse Markers, Clustering, HUD Overlay) | done |
