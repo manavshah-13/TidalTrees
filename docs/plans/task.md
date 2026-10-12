@@ -10,3 +10,4 @@
 | task-prod-3 | CI/CD Pipeline (GitHub Actions workflow for automated testing and linting) | done |
 | task-prod-4 | Production Deployment Configurations (Dockerfile, Render blueprint, Vercel SPA) | done |
 | task-phase-a | Phase A: Foundation & Polish (Design System: Animations, Scroll-Reveal, Oceanic Scrollbar, Typography) | done |
+| task-phase-b | Phase B: Hero & First Impression Overhaul (Fullscreen Hero, AnimatedCounter, useScrollReveal) | done |
