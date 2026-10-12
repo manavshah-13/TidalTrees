@@ -65,21 +65,23 @@ export const App: React.FC = () => {
         onOpenAuthModal={() => setIsAuthModalOpen(true)}
       />
 
-      {/* Main Page Area */}
+      {/* Main Page Area with Smooth Tab Crossfade */}
       <main className="main-content">
-        {activeTab === 'dashboard' && (
-          <Dashboard
-            onOpenReportModal={() => setIsReportModalOpen(true)}
-            onOpenAuthModal={() => setIsAuthModalOpen(true)}
-            onNavigateTab={(tab) => setActiveTab(tab)}
-          />
-        )}
-        {activeTab === 'community' && <Community />}
-        {activeTab === 'ai-validation' && (
-          <AiValidation onOpenReportModal={() => setIsReportModalOpen(true)} />
-        )}
-        {activeTab === 'leaderboard' && <Leaderboard />}
-        {activeTab === 'contact' && <Contact />}
+        <div key={activeTab} className="page-view-enter">
+          {activeTab === 'dashboard' && (
+            <Dashboard
+              onOpenReportModal={() => setIsReportModalOpen(true)}
+              onOpenAuthModal={() => setIsAuthModalOpen(true)}
+              onNavigateTab={(tab) => setActiveTab(tab)}
+            />
+          )}
+          {activeTab === 'community' && <Community />}
+          {activeTab === 'ai-validation' && (
+            <AiValidation onOpenReportModal={() => setIsReportModalOpen(true)} />
+          )}
+          {activeTab === 'leaderboard' && <Leaderboard />}
+          {activeTab === 'contact' && <Contact />}
+        </div>
       </main>
 
       {/* Modals */}

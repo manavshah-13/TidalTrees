@@ -18,6 +18,7 @@ import { useFilterStore } from '../store/useFilterStore';
 import type { Report, Guardian } from '../types';
 import { MapView } from '../components/MapView';
 import { AnimatedCounter } from '../components/ui/AnimatedCounter';
+import { CardSkeleton } from '../components/ui/Skeleton';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export const Community: React.FC = () => {
@@ -256,12 +257,7 @@ export const Community: React.FC = () => {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {[1, 2, 3, 4, 5, 6].map((n) => (
-              <div key={n} className="skeleton-card space-y-3">
-                <div className="skeleton-shimmer h-4 w-24 rounded" />
-                <div className="skeleton-shimmer h-6 w-3/4 rounded" />
-                <div className="skeleton-shimmer h-12 w-full rounded" />
-                <div className="skeleton-shimmer h-4 w-1/2 rounded" />
-              </div>
+              <CardSkeleton key={n} />
             ))}
           </div>
         ) : reports.length === 0 ? (
@@ -277,14 +273,14 @@ export const Community: React.FC = () => {
             {reports.map((report, idx) => {
               const delayClass = `reveal-delay-${(idx % 4) + 1}`;
               return (
-                <div key={report.id} className={`report-card reveal ${delayClass}`}>
-                  {/* Photo Thumbnail or Fallback */}
+                <div key={report.id} className={`report-card card-tilt reveal ${delayClass}`}>
+                  {/* Photo Thumbnail with Zoom Effect or Fallback */}
                   {report.image_url ? (
-                    <div className="mb-3 rounded-lg overflow-hidden h-36 bg-black/50 border border-emerald-500/20">
+                    <div className="mb-3 rounded-lg overflow-hidden h-36 bg-black/50 border border-emerald-500/20 card-thumbnail-zoom">
                       <img
                         src={report.image_url}
                         alt={report.title}
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                        className="w-full h-full object-cover"
                       />
                     </div>
                   ) : (

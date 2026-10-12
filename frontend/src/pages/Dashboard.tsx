@@ -21,6 +21,7 @@ import { useAuthStore } from '../store/useAuthStore';
 import type { Report } from '../types';
 import { MapView } from '../components/MapView';
 import { AnimatedCounter } from '../components/ui/AnimatedCounter';
+import { CardSkeleton } from '../components/ui/Skeleton';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 interface DashboardProps {
@@ -367,12 +368,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {[1, 2, 3].map((n) => (
-                <div key={n} className="skeleton-card space-y-3">
-                  <div className="skeleton-shimmer h-4 w-24 rounded" />
-                  <div className="skeleton-shimmer h-6 w-3/4 rounded" />
-                  <div className="skeleton-shimmer h-12 w-full rounded" />
-                  <div className="skeleton-shimmer h-4 w-1/2 rounded" />
-                </div>
+                <CardSkeleton key={n} />
               ))}
             </div>
           ) : !isAuthenticated ? (
@@ -404,7 +400,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {myReports.map((report) => (
-                <div key={report.id} className="report-card">
+                <div key={report.id} className="report-card card-tilt">
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <span className={`severity-badge severity-${report.severity}`}>
                       <AlertTriangle className="w-3 h-3 inline mr-1" />

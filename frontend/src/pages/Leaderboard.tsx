@@ -14,6 +14,7 @@ import {
 import { api } from '../api/client';
 import { useAuthStore } from '../store/useAuthStore';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { TableRowSkeleton } from '../components/ui/Skeleton';
 import type { LeaderboardUser, LeaderboardResponse } from '../types';
 
 export const Leaderboard: React.FC = () => {
@@ -209,7 +210,7 @@ export const Leaderboard: React.FC = () => {
             return (
               <div
                 key={user.id}
-                className={`podium-card ${
+                className={`podium-card card-tilt ${
                   isFirst ? 'podium-card-first' : 'podium-card-standard'
                 } ${podiumCardClass} transition-all duration-300 hover:scale-[1.02]`}
               >
@@ -266,12 +267,9 @@ export const Leaderboard: React.FC = () => {
           </thead>
           <tbody className="divide-y divide-gray-800/80">
             {isLoading && leaderboard.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="py-8 text-center text-gray-400">
-                  <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-2 text-emerald-400" />
-                  Loading leaderboard data...
-                </td>
-              </tr>
+              Array.from({ length: 5 }).map((_, idx) => (
+                <TableRowSkeleton key={idx} columns={5} />
+              ))
             ) : leaderboard.length === 0 ? (
               <tr>
                 <td colSpan={5} className="py-8 text-center text-gray-400">
