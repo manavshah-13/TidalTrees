@@ -303,12 +303,14 @@ body {
   border-color: rgba(148, 163, 184, 0.4);
 }
 
-/* Subtle Magnetic Cursor / Pull Utility */
-.hover-magnetic {
+/* Subtle Magnetic Cursor / Pull / Elevation Lift Utility */
+.hover-magnetic,
+.hover-lift {
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.hover-magnetic:hover {
+.hover-magnetic:hover,
+.hover-lift:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.35);
 }
