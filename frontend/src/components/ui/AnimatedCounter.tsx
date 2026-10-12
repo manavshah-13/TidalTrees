@@ -25,8 +25,11 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     const el = elementRef.current;
     if (!el) return;
 
-    // Gracefully fallback to final value if reduced motion is preferred
-    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    // Gracefully fallback to final value if reduced motion is preferred or IntersectionObserver is undefined
+    if (
+      (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) ||
+      typeof IntersectionObserver === 'undefined'
+    ) {
       setValue(end);
       return;
     }

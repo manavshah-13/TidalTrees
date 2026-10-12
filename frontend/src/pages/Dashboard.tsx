@@ -12,6 +12,9 @@ import {
   Clock,
   ShieldCheck,
   ChevronDown,
+  Navigation,
+  Compass,
+  ArrowRight,
 } from 'lucide-react';
 import { api } from '../api/client';
 import { useAuthStore } from '../store/useAuthStore';
@@ -23,11 +26,13 @@ import { useScrollReveal } from '../hooks/useScrollReveal';
 interface DashboardProps {
   onOpenReportModal: () => void;
   onOpenAuthModal: () => void;
+  onNavigateTab?: (tab: string) => void;
 }
 
 export const Dashboard: React.FC<DashboardProps> = ({
   onOpenReportModal,
   onOpenAuthModal,
+  onNavigateTab,
 }) => {
   const { isAuthenticated, user, fetchCurrentUser } = useAuthStore();
   const [myReports, setMyReports] = useState<Report[]>([]);
@@ -62,13 +67,13 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
   const tier = getTier(user?.points);
 
-  const scrollToMetrics = () => {
-    document.getElementById('dashboard-metrics')?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
     <div className="dashboard-page">
-      {/* Full-Viewport Hero Section */}
+      {/* 1. Full-Viewport Hero Section */}
       <section className="hero-fullscreen">
         <div className="hero-bg-image" />
         <div className="hero-overlay" />
@@ -104,16 +109,16 @@ export const Dashboard: React.FC<DashboardProps> = ({
               </button>
 
               <button
-                onClick={scrollToMetrics}
+                onClick={() => scrollToSection('dashboard-map')}
                 className="btn-secondary flex items-center gap-2 py-3 px-6 text-sm font-semibold"
               >
-                <FileCheck2 className="w-4 h-4 text-emerald-400" />
-                <span>Explore Live Data</span>
+                <Compass className="w-4 h-4 text-emerald-400" />
+                <span>Explore Interactive Map</span>
               </button>
             </div>
           </div>
 
-          {/* Four Live Impact Counters */}
+          {/* Dynamic Impact Counters Grid */}
           <div className="impact-counter-grid">
             <div className="impact-counter">
               <div className="impact-number">
@@ -147,35 +152,92 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
         {/* Bouncing Scroll Down Indicator */}
         <div
-          onClick={scrollToMetrics}
+          onClick={() => scrollToSection('quick-actions')}
           className="scroll-down-indicator"
           role="button"
           tabIndex={0}
           aria-label="Scroll to dashboard overview"
         >
           <span className="text-[10px] font-semibold uppercase tracking-widest text-emerald-300/80 mb-1">
-            Scroll Down
+            Explore Overview
           </span>
           <ChevronDown className="w-4 h-4 text-emerald-400" />
         </div>
       </section>
 
       {/* Downstream Dashboard Content */}
-      <div className="page-root" id="dashboard-metrics" ref={revealContainerRef}>
-        {/* Hero Welcome & Quick Stats */}
-        <div className="dashboard-hero-card reveal">
+      <div className="page-root pt-0" ref={revealContainerRef}>
+        {/* 2. Floating Quick Actions Bar */}
+        <div className="quick-actions-bar reveal" id="quick-actions">
+          <div
+            onClick={onOpenReportModal}
+            className="quick-action-card"
+          >
+            <div className="quick-action-icon bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+              <PlusCircle className="w-6 h-6" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-white font-bold text-sm flex items-center justify-between">
+                <span>Report Threat</span>
+                <ArrowRight className="w-4 h-4 text-emerald-400/70" />
+              </h3>
+              <p className="text-xs text-gray-400 mt-0.5">Submit geotagged observations</p>
+            </div>
+          </div>
+
+          <div
+            onClick={() => {
+              if (onNavigateTab) {
+                onNavigateTab('ai-validation');
+              } else {
+                scrollToSection('dashboard-map');
+              }
+            }}
+            className="quick-action-card"
+          >
+            <div className="quick-action-icon bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+              <Sparkles className="w-6 h-6" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-white font-bold text-sm flex items-center justify-between">
+                <span>AI Spectral Validation</span>
+                <ArrowRight className="w-4 h-4 text-cyan-400/70" />
+              </h3>
+              <p className="text-xs text-gray-400 mt-0.5">Scan drone or satellite imagery</p>
+            </div>
+          </div>
+
+          <div
+            onClick={() => scrollToSection('dashboard-map')}
+            className="quick-action-card"
+          >
+            <div className="quick-action-icon bg-teal-500/10 border border-teal-500/30 text-teal-400">
+              <Compass className="w-6 h-6" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-white font-bold text-sm flex items-center justify-between">
+                <span>Explore Interactive Map</span>
+                <ArrowRight className="w-4 h-4 text-teal-400/70" />
+              </h3>
+              <p className="text-xs text-gray-400 mt-0.5">Live spatial coordinate viewer</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Personal Guardian Metrics Card */}
+        <div className="dashboard-hero-card reveal mb-10" id="guardian-metrics">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <span className="badge-pill-emerald">Live Conservation Node</span>
+                <span className="badge-pill-emerald">Guardian Node Status</span>
                 <span className="text-xs text-gray-400">Monitoring Sector: Global Coastal Delta</span>
               </div>
-              <h2 className="text-3xl font-extrabold text-white tracking-tight">
+              <h2 className="text-2xl font-extrabold text-white tracking-tight">
                 {isAuthenticated && user
                   ? `Welcome Back, ${user.username}`
                   : 'Mangrove Protection Command'}
               </h2>
-              <p className="text-sm text-gray-300 mt-1 max-w-xl">
+              <p className="text-xs text-gray-300 mt-1 max-w-xl">
                 Track environmental incidents, validate satellite alerts, and earn recognition
                 for safeguarding critical coastal mangrove ecosystems.
               </p>
@@ -184,25 +246,25 @@ export const Dashboard: React.FC<DashboardProps> = ({
             <div className="flex items-center gap-3">
               <button
                 onClick={onOpenReportModal}
-                className="btn-primary flex items-center gap-2 py-3 px-5 text-sm font-semibold shadow-lg shadow-emerald-950/40"
+                className="btn-primary flex items-center gap-2 py-2.5 px-4 text-xs font-semibold shadow-lg shadow-emerald-950/40"
               >
-                <PlusCircle className="w-5 h-5 text-white" />
-                <span>Report New Incident</span>
+                <PlusCircle className="w-4 h-4 text-white" />
+                <span>New Incident</span>
               </button>
               {isAuthenticated && (
                 <button
                   onClick={fetchReports}
                   title="Refresh stats"
-                  className="btn-secondary p-3"
+                  className="btn-secondary p-2.5"
                 >
-                  <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                  <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
                 </button>
               )}
             </div>
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
             <div className="stat-card">
               <div className="flex items-center justify-between">
                 <span className="stat-label">Conservation Points</span>
@@ -237,7 +299,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <div className={`stat-value text-base mt-2 font-bold ${tier.color}`}>
                 {tier.title}
               </div>
-              <div className="stat-subtext">Level 1 Community Sentinel</div>
+              <div className="stat-subtext">Community Field Sentinel</div>
             </div>
 
             <div className="stat-card">
@@ -253,8 +315,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
         </div>
 
-        {/* Interactive Telemetry Map */}
-        <div className="mt-8 reveal reveal-delay-1">
+        {/* 3. Live Map Section with Glassmorphic Overlays */}
+        <div className="mt-8 reveal reveal-delay-1 mb-12" id="dashboard-map">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-xl font-bold text-white flex items-center gap-2">
@@ -266,13 +328,30 @@ export const Dashboard: React.FC<DashboardProps> = ({
               </p>
             </div>
           </div>
-          <div className="rounded-2xl overflow-hidden border border-emerald-500/20 shadow-2xl bg-[#031317]">
-            <MapView height="380px" />
+
+          <div className="relative rounded-2xl overflow-hidden border border-emerald-500/20 shadow-2xl bg-[#031317]">
+            <MapView height="420px" />
+
+            {/* Glassmorphic Stats Overlays */}
+            <div className="absolute top-4 left-4 z-10 flex flex-wrap gap-2.5 pointer-events-none">
+              <div className="map-glass-badge flex items-center gap-2 pointer-events-auto">
+                <div className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping" />
+                <span className="text-xs font-semibold text-white">Threat Hotspots: <span className="text-rose-400 font-mono">14 Active</span></span>
+              </div>
+              <div className="map-glass-badge flex items-center gap-2 pointer-events-auto">
+                <Navigation className="w-3.5 h-3.5 text-cyan-400" />
+                <span className="text-xs font-semibold text-white">Patrol Routes: <span className="text-cyan-400 font-mono">8 Live</span></span>
+              </div>
+              <div className="map-glass-badge flex items-center gap-2 pointer-events-auto">
+                <Trees className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-xs font-semibold text-white">Canopy Health: <span className="text-emerald-400 font-mono">94.2%</span></span>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Reports Section */}
-        <div className="mt-10 reveal reveal-delay-2" id="incident-reports">
+        {/* 4. My Reports Grid with Staggered Reveal and Skeleton Loading */}
+        <div className="mt-10 reveal reveal-delay-2 mb-14" id="incident-reports">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-xl font-bold text-white flex items-center gap-2">
@@ -285,7 +364,18 @@ export const Dashboard: React.FC<DashboardProps> = ({
             </div>
           </div>
 
-          {!isAuthenticated ? (
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {[1, 2, 3].map((n) => (
+                <div key={n} className="skeleton-card space-y-3">
+                  <div className="skeleton-shimmer h-4 w-24 rounded" />
+                  <div className="skeleton-shimmer h-6 w-3/4 rounded" />
+                  <div className="skeleton-shimmer h-12 w-full rounded" />
+                  <div className="skeleton-shimmer h-4 w-1/2 rounded" />
+                </div>
+              ))}
+            </div>
+          ) : !isAuthenticated ? (
             <div className="empty-state-card text-center py-14">
               <div className="w-12 h-12 rounded-full bg-emerald-950/70 border border-emerald-500/20 flex items-center justify-center mx-auto mb-4 text-emerald-400">
                 <Trees className="w-6 h-6" />
@@ -355,6 +445,52 @@ export const Dashboard: React.FC<DashboardProps> = ({
               ))}
             </div>
           )}
+        </div>
+
+        {/* 5. "How It Works" 3-Step Visual Narrative */}
+        <div className="mt-14 reveal reveal-delay-3 pb-8">
+          <div className="text-center max-w-xl mx-auto mb-10">
+            <span className="badge-pill-emerald inline-block mb-2">Conservation Workflow</span>
+            <h3 className="text-2xl font-extrabold text-white">How TidalTrees Works</h3>
+            <p className="text-xs text-gray-400 mt-1">
+              Closing the loop between citizen vigilance, satellite AI classification, and ground-level coastal response.
+            </p>
+          </div>
+
+          <div className="how-it-works-grid">
+            <div className="how-step-card">
+              <span className="step-num-badge">01</span>
+              <h4 className="text-base font-bold text-white mb-2 flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-emerald-400" />
+                <span>Detect & Report</span>
+              </h4>
+              <p className="text-xs text-gray-300 leading-relaxed">
+                Capture geo-tagged coastal observations, photographic evidence, and initial damage severity using any mobile device or browser.
+              </p>
+            </div>
+
+            <div className="how-step-card">
+              <span className="step-num-badge">02</span>
+              <h4 className="text-base font-bold text-white mb-2 flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-cyan-400" />
+                <span>AI Spectral Analysis</span>
+              </h4>
+              <p className="text-xs text-gray-300 leading-relaxed">
+                Multi-spectral computer vision cross-references NDVI vegetation canopy disruption and scores anomaly threat confidence automatically.
+              </p>
+            </div>
+
+            <div className="how-step-card">
+              <span className="step-num-badge">03</span>
+              <h4 className="text-base font-bold text-white mb-2 flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-teal-400" />
+                <span>Ranger Deployment</span>
+              </h4>
+              <p className="text-xs text-gray-300 leading-relaxed">
+                Coastal guardians and local forest patrol units receive actionable dispatch alerts to initiate on-site restoration and enforcement.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

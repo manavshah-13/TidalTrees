@@ -8,9 +8,12 @@ import {
   Loader2,
   Radio,
   Clock,
+  Copy,
+  Check,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { api } from '../api/client';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -21,6 +24,18 @@ export const Contact: React.FC = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSent, setIsSent] = useState<boolean>(false);
+  const [isCopied, setIsCopied] = useState<boolean>(false);
+
+  const containerRef = useScrollReveal<HTMLDivElement>();
+
+  const coordinates = '23.0768° N, 72.5367° E (Gulf of Khambhat HQ)';
+
+  const handleCopyCoordinates = () => {
+    navigator.clipboard.writeText(coordinates);
+    setIsCopied(true);
+    toast.success('Coordinates copied to clipboard!');
+    setTimeout(() => setIsCopied(false), 2500);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,15 +63,23 @@ export const Contact: React.FC = () => {
     }
   };
 
+  const partners = [
+    { name: 'Global Mangrove Watch', tag: 'Satellite Monitoring' },
+    { name: 'Coastal Guard Alliance', tag: 'Field Dispatch' },
+    { name: 'Blue Carbon Initiative', tag: 'Restoration Finance' },
+    { name: 'IUCN Mangrove Group', tag: 'Biodiversity Standards' },
+  ];
+
   return (
-    <div className="page-root">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-10">
+    <div className="page-root" ref={containerRef}>
+      <div className="max-w-5xl mx-auto">
+        {/* Title Header */}
+        <div className="text-center mb-10 reveal">
           <div className="badge-pill-emerald inline-flex items-center gap-1.5 mb-2">
             <Radio className="w-3.5 h-3.5 text-emerald-400" />
             <span>24/7 Coastal Dispatch & Inquiries</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
             Connect with TidalTrees Coordinators
           </h1>
           <p className="text-sm text-gray-300 mt-2 max-w-lg mx-auto">
@@ -64,9 +87,10 @@ export const Contact: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Emergency & SMS Dispatch Info */}
-          <div className="md:col-span-1 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-14">
+          {/* Emergency & SMS Dispatch Info Column */}
+          <div className="md:col-span-5 space-y-4 reveal reveal-delay-1">
+            {/* SMS Hotline Card */}
             <div className="contact-info-card">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-9 h-9 rounded-lg bg-emerald-950/80 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
@@ -78,13 +102,14 @@ export const Contact: React.FC = () => {
                 </div>
               </div>
               <p className="text-xs text-gray-300 leading-relaxed mb-3">
-                Send SMS format <code>REPORT [LOCATION] [DETAILS]</code> to our automated coastal gateway:
+                Send SMS format <code className="text-emerald-300 bg-black/40 px-1 py-0.5 rounded">REPORT [LOCATION] [DETAILS]</code> to our automated coastal gateway:
               </p>
-              <div className="bg-black/40 border border-emerald-500/20 rounded p-2 text-center font-mono text-emerald-400 text-sm font-bold">
+              <div className="bg-black/50 border border-emerald-500/30 rounded-lg p-2.5 text-center font-mono text-emerald-400 text-sm font-bold tracking-wider">
                 +1 (800) 555-TIDAL
               </div>
             </div>
 
+            {/* Response Time Card */}
             <div className="contact-info-card">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-9 h-9 rounded-lg bg-cyan-950/80 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
@@ -100,24 +125,36 @@ export const Contact: React.FC = () => {
               </p>
             </div>
 
-            <div className="contact-info-card">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-9 h-9 rounded-lg bg-teal-950/80 border border-teal-500/30 flex items-center justify-center text-teal-400">
-                  <MapPin className="w-5 h-5" />
+            {/* 3. Location & Dispatch Map Preview Card */}
+            <div className="contact-info-card overflow-hidden">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-teal-400" />
+                  <h3 className="font-bold text-white text-sm">Field Headquarters</h3>
                 </div>
-                <div>
-                  <h3 className="font-bold text-white text-sm">Headquarters</h3>
-                  <span className="text-[11px] text-teal-400">Coastal Science Lab</span>
-                </div>
+                <button
+                  type="button"
+                  onClick={handleCopyCoordinates}
+                  className="text-[11px] flex items-center gap-1 text-emerald-400 hover:text-emerald-300 bg-emerald-950/40 px-2 py-1 rounded border border-emerald-500/20 cursor-pointer transition-colors"
+                >
+                  {isCopied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                  <span>{isCopied ? 'Copied' : 'Copy GPS'}</span>
+                </button>
               </div>
+
+              {/* Graphical GPS coordinates preview */}
+              <div className="p-3 rounded-lg bg-black/50 border border-teal-500/20 mb-3 font-mono text-xs text-emerald-300 flex items-center justify-between">
+                <span>{coordinates}</span>
+              </div>
+
               <p className="text-xs text-gray-300 leading-relaxed">
-                Marine Ecology Research Division, Adani University Campus, Ahmedabad, Gujarat.
+                Marine Ecology Research Division, Adani University Coastal Delta Hub, Gujarat.
               </p>
             </div>
           </div>
 
-          {/* Contact Form */}
-          <div className="md:col-span-2">
+          {/* 1. Contact Form with Floating Label Inputs */}
+          <div className="md:col-span-7 reveal reveal-delay-2">
             <div className="contact-form-card">
               <div className="flex items-center gap-2 mb-6 border-b border-gray-700/60 pb-3">
                 <Mail className="w-5 h-5 text-emerald-400" />
@@ -125,98 +162,144 @@ export const Contact: React.FC = () => {
               </div>
 
               {isSent ? (
-                <div className="text-center py-10">
-                  <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto mb-3" />
-                  <h3 className="text-xl font-bold text-white">Thank You for Reaching Out</h3>
-                  <p className="text-sm text-gray-300 mt-1 max-w-sm mx-auto">
-                    Your transmission has been saved to the TidalTrees platform. Our coordination desk will respond to your provided email address.
+                <div className="text-center py-10 animate-slide-up">
+                  <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center mx-auto mb-4 text-emerald-400">
+                    <CheckCircle2 className="w-10 h-10" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">Inquiry Successfully Dispatched</h3>
+                  <p className="text-sm text-gray-300 mt-2 max-w-sm mx-auto leading-relaxed">
+                    Your transmission has been permanently logged to the TidalTrees dispatch queue. Our regional coastal operations coordinator will respond within 24 hours.
                   </p>
                   <button
                     onClick={() => setIsSent(false)}
                     className="btn-secondary mt-6 text-xs"
                   >
-                    Send Another Message
+                    Send Another Transmission
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="input-label">Full Name</label>
+                    {/* Floating Label: Full Name */}
+                    <div className="floating-label-group">
                       <input
                         type="text"
+                        id="contact-name"
                         required
-                        placeholder="Dr. Maya Patel"
-                        className="styled-input"
+                        placeholder=" "
+                        className="floating-input"
                         value={formData.name}
                         onChange={(e) =>
                           setFormData({ ...formData, name: e.target.value })
                         }
                       />
+                      <label htmlFor="contact-name" className="floating-label">
+                        Full Name
+                      </label>
                     </div>
-                    <div>
-                      <label className="input-label">Email Address</label>
+
+                    {/* Floating Label: Email Address */}
+                    <div className="floating-label-group">
                       <input
                         type="email"
+                        id="contact-email"
                         required
-                        placeholder="maya@conservation.org"
-                        className="styled-input"
+                        placeholder=" "
+                        className="floating-input"
                         value={formData.email}
                         onChange={(e) =>
                           setFormData({ ...formData, email: e.target.value })
                         }
                       />
+                      <label htmlFor="contact-email" className="floating-label">
+                        Email Address
+                      </label>
                     </div>
                   </div>
 
-                  <div>
-                    <label className="input-label">Subject</label>
+                  {/* Floating Label: Subject */}
+                  <div className="floating-label-group">
                     <input
                       type="text"
+                      id="contact-subject"
                       required
-                      placeholder="e.g., Coastal Patrol Collaboration / Anomaly Query"
-                      className="styled-input"
+                      placeholder=" "
+                      className="floating-input"
                       value={formData.subject}
                       onChange={(e) =>
                         setFormData({ ...formData, subject: e.target.value })
                       }
                     />
+                    <label htmlFor="contact-subject" className="floating-label">
+                      Inquiry Subject
+                    </label>
                   </div>
 
-                  <div>
-                    <label className="input-label">Message & Coordinates</label>
+                  {/* Floating Label: Message */}
+                  <div className="floating-label-group">
                     <textarea
+                      id="contact-message"
                       rows={5}
                       required
-                      placeholder="Please include details about your request, zone coordinates, or partnership proposal..."
-                      className="styled-input resize-none"
+                      placeholder=" "
+                      className="floating-input resize-none pt-4"
                       value={formData.message}
                       onChange={(e) =>
                         setFormData({ ...formData, message: e.target.value })
                       }
                     />
+                    <label htmlFor="contact-message" className="floating-label">
+                      Message & Coordinates Details
+                    </label>
                   </div>
 
+                  {/* 2. Interactive Submission Feedback Button */}
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="btn-primary w-full flex items-center justify-center gap-2 py-3 font-semibold mt-4"
+                    className="btn-primary w-full flex items-center justify-center gap-2 py-3.5 font-semibold mt-2 cursor-pointer transition-all duration-300"
                   >
                     {isSubmitting ? (
                       <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Transmitting...</span>
+                        <Loader2 className="w-4 h-4 animate-spin text-white" />
+                        <span>Dispatching to Coastal Network...</span>
                       </>
                     ) : (
                       <>
-                        <Send className="w-4 h-4" />
-                        <span>Send Message</span>
+                        <Send className="w-4 h-4 text-emerald-200" />
+                        <span>Send Transmission</span>
                       </>
                     )}
                   </button>
                 </form>
               )}
             </div>
+          </div>
+        </div>
+
+        {/* 4. Partner & Trust Section */}
+        <div className="pt-8 border-t border-emerald-500/15 reveal reveal-delay-3">
+          <div className="text-center mb-6">
+            <span className="text-xs uppercase font-bold tracking-widest text-emerald-400/90 block mb-1">
+              Trusted Alliances & Scientific Coalitions
+            </span>
+            <p className="text-xs text-gray-400">
+              Coordinating coastal resilience, satellite radar validation, and mangrove protection worldwide.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {partners.map((partner, idx) => (
+              <div
+                key={idx}
+                className="p-4 rounded-xl bg-gradient-to-b from-[#081f22]/80 to-[#041013]/80 border border-emerald-500/20 text-center hover:border-emerald-500/40 transition-all"
+              >
+                <div className="text-sm font-bold text-white mb-1">{partner.name}</div>
+                <div className="text-[10px] text-emerald-400 font-mono uppercase tracking-wider">
+                  {partner.tag}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

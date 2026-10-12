@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Sparkles,
   UploadCloud,
@@ -10,9 +10,14 @@ import {
   Info,
   X,
   PlusCircle,
+  Eye,
+  Activity,
+  Layers,
+  Check,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { api } from '../api/client';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 interface AnalysisResponse {
   confidence: number;
@@ -32,8 +37,25 @@ export const AiValidation: React.FC<AiValidationProps> = ({ onOpenReportModal })
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
+  const [analysisPhase, setAnalysisPhase] = useState<number>(1);
   const [result, setResult] = useState<AnalysisResponse | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const containerRef = useScrollReveal<HTMLDivElement>();
+
+  // Progress phases timer during analysis
+  useEffect(() => {
+    let interval: any;
+    if (isAnalyzing) {
+      setAnalysisPhase(1);
+      interval = setInterval(() => {
+        setAnalysisPhase((prev) => (prev < 3 ? prev + 1 : prev));
+      }, 900);
+    } else {
+      setAnalysisPhase(1);
+    }
+    return () => clearInterval(interval);
+  }, [isAnalyzing]);
 
   const handleFileSelect = (file: File) => {
     if (!file.type.startsWith('image/')) {
@@ -139,9 +161,9 @@ export const AiValidation: React.FC<AiValidationProps> = ({ onOpenReportModal })
   };
 
   return (
-    <div className="page-root max-w-6xl mx-auto">
+    <div className="page-root max-w-6xl mx-auto" ref={containerRef}>
       {/* Header */}
-      <div className="mb-10 text-center md:text-left">
+      <div className="mb-10 text-center md:text-left reveal">
         <div className="badge-pill-emerald flex items-center gap-1.5 w-fit mx-auto md:mx-0 mb-3">
           <Sparkles className="w-3.5 h-3.5 text-teal-400" />
           <span>Multimodal Telemetry & Canopy AI</span>
@@ -156,19 +178,20 @@ export const AiValidation: React.FC<AiValidationProps> = ({ onOpenReportModal })
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Upload Column */}
-        <div className="lg:col-span-5 flex flex-col gap-5">
+        {/* 1. Dynamic Dropzone Column */}
+        <div className="lg:col-span-5 flex flex-col gap-5 reveal reveal-delay-1">
           <div
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             onClick={() => !selectedFile && fileInputRef.current?.click()}
-            className={`relative rounded-2xl border-2 border-dashed transition-all p-8 flex flex-col items-center justify-center text-center cursor-pointer min-h-[320px] ${
-              isDragging
-                ? 'border-teal-400 bg-teal-500/10 scale-[1.01]'
-                : 'border-teal-500/30 bg-[#081a1d]/60 hover:bg-[#081a1d]/90 hover:border-teal-400/60'
+            className={`ai-dropzone p-8 flex flex-col items-center justify-center text-center cursor-pointer min-h-[340px] ${
+              isDragging ? 'active animate-pulse-glow' : ''
             }`}
           >
+            {/* Animated Laser Scanline effect when analyzing */}
+            {isAnalyzing && <div className="scanline" />}
+
             <input
               type="file"
               ref={fileInputRef}
@@ -179,11 +202,20 @@ export const AiValidation: React.FC<AiValidationProps> = ({ onOpenReportModal })
 
             {previewUrl ? (
               <div className="relative w-full h-full flex flex-col items-center">
-                <img
-                  src={previewUrl}
-                  alt="Upload preview"
-                  className="w-full max-h-64 object-cover rounded-xl shadow-xl border border-teal-500/30 mb-3"
-                />
+                <div className="relative w-full overflow-hidden rounded-xl border border-teal-500/30 mb-3 shadow-xl">
+                  <img
+                    src={previewUrl}
+                    alt="Upload preview"
+                    className="w-full max-h-64 object-cover"
+                  />
+                  {isAnalyzing && (
+                    <div className="absolute inset-0 bg-emerald-950/40 backdrop-blur-[2px] flex items-center justify-center">
+                      <div className="badge-pill-emerald text-xs animate-pulse">
+                        Neural Model Processing...
+                      </div>
+                    </div>
+                  )}
+                </div>
                 <div className="flex items-center justify-between w-full px-1">
                   <span className="text-xs text-gray-300 truncate max-w-[200px]">
                     {selectedFile?.name}
@@ -240,26 +272,68 @@ export const AiValidation: React.FC<AiValidationProps> = ({ onOpenReportModal })
           </button>
         </div>
 
-        {/* Results Column */}
-        <div className="lg:col-span-7">
+        {/* 2. Results & Multi-Phase Analysis Column */}
+        <div className="lg:col-span-7 reveal reveal-delay-2">
           {isAnalyzing ? (
-            <div className="rounded-2xl border border-teal-500/30 bg-[#081a1d]/70 p-10 flex flex-col items-center justify-center text-center min-h-[420px]">
+            <div className="rounded-2xl border border-teal-500/30 bg-[#081a1d]/85 p-8 flex flex-col items-center justify-center text-center min-h-[420px] shadow-2xl relative overflow-hidden">
+              <div className="skeleton-shimmer absolute inset-0 opacity-15 pointer-events-none" />
+
               <div className="relative mb-6">
                 <div className="w-20 h-20 rounded-full border-4 border-teal-500/20 border-t-teal-400 animate-spin"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <Sparkles className="w-8 h-8 text-teal-300 animate-pulse" />
                 </div>
               </div>
+
               <h3 className="text-lg font-bold text-white mb-2">
-                Analyzing Canopy & Coastal Reflectance
+                Scanning Canopy & Coastal Reflectance
               </h3>
-              <p className="text-xs text-gray-400 max-w-sm">
-                Parsing chlorophyl degradation patterns, salinity stress markers, and morphological
+              <p className="text-xs text-gray-400 max-w-sm mb-6">
+                Evaluating chlorophyl degradation patterns, salinity stress markers, and morphological
                 anomalies via Gemini multimodal vision models.
               </p>
+
+              {/* Animated Progress Checklist */}
+              <div className="w-full max-w-md bg-[#040d10]/90 border border-teal-500/20 rounded-xl p-4 text-left space-y-3">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="flex items-center gap-2 text-gray-200 font-medium">
+                    <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${analysisPhase >= 1 ? 'bg-emerald-500 text-black font-bold' : 'bg-gray-800 text-gray-500'}`}>
+                      {analysisPhase > 1 ? <Check className="w-3 h-3" /> : '1'}
+                    </span>
+                    <span>Analyzing NDVI Vegetation Index</span>
+                  </span>
+                  <span className={`text-[10px] font-mono ${analysisPhase >= 1 ? 'text-emerald-400' : 'text-gray-500'}`}>
+                    {analysisPhase > 1 ? 'COMPLETE' : 'SCANNING...'}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between text-xs">
+                  <span className="flex items-center gap-2 text-gray-200 font-medium">
+                    <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${analysisPhase >= 2 ? 'bg-emerald-500 text-black font-bold' : 'bg-gray-800 text-gray-500'}`}>
+                      {analysisPhase > 2 ? <Check className="w-3 h-3" /> : '2'}
+                    </span>
+                    <span>Detecting Canopy Loss & Timber Incursions</span>
+                  </span>
+                  <span className={`text-[10px] font-mono ${analysisPhase >= 2 ? 'text-emerald-400' : 'text-gray-500'}`}>
+                    {analysisPhase > 2 ? 'COMPLETE' : analysisPhase === 2 ? 'PARSING...' : 'WAITING'}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between text-xs">
+                  <span className="flex items-center gap-2 text-gray-200 font-medium">
+                    <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${analysisPhase >= 3 ? 'bg-emerald-500 text-black font-bold' : 'bg-gray-800 text-gray-500'}`}>
+                      3
+                    </span>
+                    <span>Scoring Threat Probability & Mitigation</span>
+                  </span>
+                  <span className={`text-[10px] font-mono ${analysisPhase >= 3 ? 'text-cyan-400 animate-pulse' : 'text-gray-500'}`}>
+                    {analysisPhase === 3 ? 'COMPUTING...' : 'WAITING'}
+                  </span>
+                </div>
+              </div>
             </div>
           ) : result ? (
-            <div className="rounded-2xl border border-teal-500/30 bg-[#081a1d]/85 backdrop-blur-md p-6 md:p-8 shadow-2xl flex flex-col gap-6">
+            <div className="animate-slide-up rounded-2xl border border-teal-500/30 bg-[#081a1d]/85 backdrop-blur-md p-6 md:p-8 shadow-2xl flex flex-col gap-6">
               {/* Header result row */}
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-teal-500/20 pb-5">
                 <div>
@@ -284,21 +358,44 @@ export const AiValidation: React.FC<AiValidationProps> = ({ onOpenReportModal })
                 })()}
               </div>
 
-              {/* Confidence Score Bar */}
+              {/* Confidence Score Meter */}
               <div className="bg-[#040d10] p-4 rounded-xl border border-teal-500/20">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-gray-300 font-medium">Confidence Score</span>
+                  <span className="text-xs text-gray-300 font-medium flex items-center gap-1.5">
+                    <Activity className="w-3.5 h-3.5 text-teal-400" />
+                    <span>Spectral Confidence Score</span>
+                  </span>
                   <span className="text-sm font-mono font-bold text-teal-400">
                     {(result.confidence * 100).toFixed(1)}%
                   </span>
                 </div>
-                <div className="w-full bg-gray-800 rounded-full h-2.5 overflow-hidden">
+                <div className="meter-track">
                   <div
-                    className="bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 h-2.5 rounded-full transition-all duration-700"
+                    className="meter-fill"
                     style={{ width: `${Math.min(100, result.confidence * 100)}%` }}
-                  ></div>
+                  />
                 </div>
               </div>
+
+              {/* Side-by-side Inspection Preview View */}
+              {previewUrl && (
+                <div className="rounded-xl overflow-hidden border border-teal-500/20 bg-[#040d10]/70 p-3">
+                  <div className="text-[11px] text-gray-400 uppercase font-semibold tracking-wider mb-2 flex items-center gap-1.5">
+                    <Eye className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Analyzed Telemetry Image Target</span>
+                  </div>
+                  <div className="h-32 rounded-lg overflow-hidden border border-teal-500/20 relative">
+                    <img
+                      src={previewUrl}
+                      alt="Analyzed target"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute bottom-2 right-2 badge-pill-emerald text-[10px]">
+                      Validated Sample
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Summary */}
               <div>
@@ -312,8 +409,9 @@ export const AiValidation: React.FC<AiValidationProps> = ({ onOpenReportModal })
 
               {/* Identified Threat Tags */}
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-teal-300 mb-2.5">
-                  Detected Threat Tags
+                <h4 className="text-xs font-bold uppercase tracking-wider text-teal-300 mb-2.5 flex items-center gap-1.5">
+                  <Layers className="w-3.5 h-3.5" />
+                  <span>Detected Threat Tags</span>
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {result.tags.map((tag, idx) => (

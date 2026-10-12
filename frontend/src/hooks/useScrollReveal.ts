@@ -12,6 +12,11 @@ export const useScrollReveal = <T extends HTMLElement = HTMLDivElement>(
     const targets = container.querySelectorAll('.reveal');
     if (targets.length === 0) return;
 
+    if (typeof IntersectionObserver === 'undefined') {
+      targets.forEach((target) => target.classList.add('visible'));
+      return;
+    }
+
     const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {

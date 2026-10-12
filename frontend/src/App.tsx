@@ -71,6 +71,7 @@ export const App: React.FC = () => {
           <Dashboard
             onOpenReportModal={() => setIsReportModalOpen(true)}
             onOpenAuthModal={() => setIsAuthModalOpen(true)}
+            onNavigateTab={(tab) => setActiveTab(tab)}
           />
         )}
         {activeTab === 'community' && <Community />}

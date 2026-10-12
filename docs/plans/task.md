@@ -11,3 +11,8 @@
 | task-prod-4 | Production Deployment Configurations (Dockerfile, Render blueprint, Vercel SPA) | done |
 | task-phase-a | Phase A: Foundation & Polish (Design System: Animations, Scroll-Reveal, Oceanic Scrollbar, Typography) | done |
 | task-phase-b | Phase B: Hero & First Impression Overhaul (Fullscreen Hero, AnimatedCounter, useScrollReveal) | done |
+| task-c1 | Task C1: Dashboard Page Restructure (Hero, Quick Actions Bar, Live Map, My Reports, How It Works) | done |
+| task-c2 | Task C2: Community Page Visual Storytelling (Hero Banner, Spotlight, Staggered Grid) | done |
+| task-c3 | Task C3: AI Validation Page Interactive Upgrade (Dropzone, Shimmer Scanner, Results Meter) | done |
+| task-c4 | Task C4: Leaderboard Page Gamification Polish (Staggered Podium, Delta Indicators, User Position) | done |
+| task-c5 | Task C5: Contact Page Premium Form & Social Proof (Floating Inputs, Feedback State, Partner Section) | done |

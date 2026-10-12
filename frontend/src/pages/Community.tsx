@@ -10,11 +10,15 @@ import {
   Phone,
   Shield,
   RefreshCw,
+  Trees,
+  Flame,
 } from 'lucide-react';
 import { api } from '../api/client';
 import { useFilterStore } from '../store/useFilterStore';
 import type { Report, Guardian } from '../types';
 import { MapView } from '../components/MapView';
+import { AnimatedCounter } from '../components/ui/AnimatedCounter';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export const Community: React.FC = () => {
   const {
@@ -31,6 +35,8 @@ export const Community: React.FC = () => {
   const [guardians, setGuardians] = useState<Guardian[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const containerRef = useScrollReveal<HTMLDivElement>();
 
   const fetchCommunityData = async () => {
     setIsLoading(true);
@@ -62,31 +68,121 @@ export const Community: React.FC = () => {
     fetchCommunityData();
   }, [severity, status, searchTerm]);
 
+  // Spotlight: Pick top 2 high/critical or first 2 available reports
+  const spotlightReports = reports
+    .filter((r) => r.severity === 'critical' || r.severity === 'high')
+    .slice(0, 2);
+  const displayedSpotlights = spotlightReports.length > 0 ? spotlightReports : reports.slice(0, 2);
+
   return (
-    <div className="page-root">
-      {/* Title */}
-      <div className="mb-8">
-        <div className="badge-pill-emerald flex items-center gap-1 w-fit mb-2">
-          <Users className="w-3.5 h-3.5" />
-          <span>Coastal Defense Collective</span>
+    <div className="page-root" ref={containerRef}>
+      {/* 1. Community Hero Banner */}
+      <div className="spotlight-card mb-8 reveal">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="max-w-xl">
+            <div className="badge-pill-emerald flex items-center gap-1.5 w-fit mb-3">
+              <Users className="w-3.5 h-3.5" />
+              <span>Coastal Defense Collective</span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+              Community Incident Feed & Ranger Network
+            </h1>
+            <p className="text-sm text-gray-300 leading-relaxed">
+              Explore public threat reports validated by satellite telemetry and connect directly with regional
+              mangrove guardian patrol units protecting vulnerable deltas.
+            </p>
+          </div>
+
+          {/* Compact Community Metric Counters */}
+          <div className="grid grid-cols-3 gap-3 sm:gap-5 w-full lg:w-auto">
+            <div className="text-center p-3.5 rounded-xl bg-black/40 border border-emerald-500/20">
+              <div className="text-2xl font-extrabold font-mono text-emerald-400">
+                <AnimatedCounter end={1420} suffix="+" />
+              </div>
+              <div className="text-[11px] text-gray-400 uppercase tracking-wider mt-1">Active Stewards</div>
+            </div>
+
+            <div className="text-center p-3.5 rounded-xl bg-black/40 border border-emerald-500/20">
+              <div className="text-2xl font-extrabold font-mono text-cyan-400">
+                <AnimatedCounter end={72400} suffix=" Ha" />
+              </div>
+              <div className="text-[11px] text-gray-400 uppercase tracking-wider mt-1">Hectares Guarded</div>
+            </div>
+
+            <div className="text-center p-3.5 rounded-xl bg-black/40 border border-emerald-500/20">
+              <div className="text-2xl font-extrabold font-mono text-amber-400">
+                <AnimatedCounter end={318} suffix="+" />
+              </div>
+              <div className="text-[11px] text-gray-400 uppercase tracking-wider mt-1">Rapid Responses</div>
+            </div>
+          </div>
         </div>
-        <h1 className="text-3xl font-extrabold text-white tracking-tight">
-          Community Incident Feed & Ranger Network
-        </h1>
-        <p className="text-sm text-gray-300 mt-1">
-          Explore public reports verified by satellite telemetry and connect with regional mangrove guardian units.
-        </p>
       </div>
 
+      {/* 2. "Featured Reports" Spotlight */}
+      {displayedSpotlights.length > 0 && (
+        <div className="mb-10 reveal reveal-delay-1">
+          <div className="flex items-center gap-2 mb-4">
+            <Flame className="w-4 h-4 text-amber-400" />
+            <h2 className="text-lg font-bold text-white uppercase tracking-wider text-xs">
+              Featured High-Impact Incidents
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {displayedSpotlights.map((spotlight) => (
+              <div
+                key={`spotlight-${spotlight.id}`}
+                className="relative rounded-2xl overflow-hidden border border-emerald-500/30 bg-gradient-to-br from-[#062024]/90 to-[#021013]/90 shadow-2xl p-5 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-3 mb-3">
+                    <span className={`severity-badge severity-${spotlight.severity}`}>
+                      <AlertTriangle className="w-3 h-3 inline mr-1" />
+                      <span className="uppercase text-[11px] font-bold">{spotlight.severity} Priority</span>
+                    </span>
+
+                    {spotlight.ai_confidence && (
+                      <span className="badge-pill-cyan flex items-center gap-1 text-[11px]">
+                        <Sparkles className="w-3 h-3 text-cyan-400" />
+                        <span>AI Verified: {Math.round(spotlight.ai_confidence * 100)}%</span>
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 className="text-lg font-extrabold text-white mb-2 line-clamp-1">
+                    {spotlight.title}
+                  </h3>
+                  <p className="text-xs text-gray-300 line-clamp-2 leading-relaxed mb-4">
+                    {spotlight.description}
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-emerald-500/20 flex items-center justify-between text-xs text-gray-400">
+                  <span className="flex items-center gap-1.5 text-emerald-300">
+                    <MapPin className="w-3.5 h-3.5 text-emerald-400" />
+                    <span className="truncate max-w-[200px]">{spotlight.location}</span>
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Calendar className="w-3 h-3 text-gray-500" />
+                    {new Date(spotlight.created_at).toLocaleDateString()}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Filter Toolbar (powered by useFilterStore) */}
-      <div className="filter-toolbar-card mb-8">
+      <div className="filter-toolbar-card mb-8 reveal reveal-delay-2">
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           {/* Search Box */}
           <div className="relative w-full md:w-96">
             <Search className="w-4 h-4 text-gray-400 absolute left-3 top-3.5" />
             <input
               type="text"
-              placeholder="Search reports by title, location, or keyword..."
+              placeholder="Search reports by title, delta location, keyword..."
               className="styled-input pl-10"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -135,12 +231,12 @@ export const Community: React.FC = () => {
       </div>
 
       {/* Interactive Geospatial Telemetry Map */}
-      <div className="mb-10">
+      <div className="mb-10 reveal reveal-delay-2">
         <MapView initialReports={reports} height="440px" />
       </div>
 
-      {/* Incident Feed */}
-      <div className="mb-14">
+      {/* 3. Staggered Report Card Grid */}
+      <div className="mb-14 reveal reveal-delay-3">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold text-white flex items-center gap-2">
             <span>Verified Incidents</span>
@@ -158,9 +254,15 @@ export const Community: React.FC = () => {
         </div>
 
         {isLoading ? (
-          <div className="text-center py-12 text-gray-400">
-            <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-emerald-400" />
-            Filtering incident ledger...
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[1, 2, 3, 4, 5, 6].map((n) => (
+              <div key={n} className="skeleton-card space-y-3">
+                <div className="skeleton-shimmer h-4 w-24 rounded" />
+                <div className="skeleton-shimmer h-6 w-3/4 rounded" />
+                <div className="skeleton-shimmer h-12 w-full rounded" />
+                <div className="skeleton-shimmer h-4 w-1/2 rounded" />
+              </div>
+            ))}
           </div>
         ) : reports.length === 0 ? (
           <div className="empty-state-card text-center py-12">
@@ -172,52 +274,70 @@ export const Community: React.FC = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {reports.map((report) => (
-              <div key={report.id} className="report-card">
-                <div className="flex items-start justify-between gap-3 mb-3">
-                  <span className={`severity-badge severity-${report.severity}`}>
-                    <AlertTriangle className="w-3 h-3 inline mr-1" />
-                    <span className="uppercase text-[11px] font-bold">{report.severity}</span>
-                  </span>
-                  <span className={`status-badge status-${report.status}`}>
-                    <Clock className="w-3 h-3 inline mr-1" />
-                    <span className="capitalize text-[11px] font-medium">{report.status}</span>
-                  </span>
-                </div>
+            {reports.map((report, idx) => {
+              const delayClass = `reveal-delay-${(idx % 4) + 1}`;
+              return (
+                <div key={report.id} className={`report-card reveal ${delayClass}`}>
+                  {/* Photo Thumbnail or Fallback */}
+                  {report.image_url ? (
+                    <div className="mb-3 rounded-lg overflow-hidden h-36 bg-black/50 border border-emerald-500/20">
+                      <img
+                        src={report.image_url}
+                        alt={report.title}
+                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                      />
+                    </div>
+                  ) : (
+                    <div className="mb-3 rounded-lg h-24 bg-gradient-to-r from-emerald-950/40 to-cyan-950/40 border border-emerald-500/10 flex items-center justify-center text-emerald-400/40">
+                      <Trees className="w-8 h-8" />
+                    </div>
+                  )}
 
-                <h3 className="text-base font-bold text-white line-clamp-1 mb-2">
-                  {report.title}
-                </h3>
-                <p className="text-xs text-gray-300 line-clamp-3 mb-4 leading-relaxed">
-                  {report.description}
-                </p>
-
-                <div className="pt-3 border-t border-gray-800/80 text-xs text-gray-400 space-y-1.5">
-                  <div className="flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="truncate">{report.location}</span>
-                  </div>
-                  <div className="flex items-center justify-between text-[11px] text-gray-500">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-3 h-3" />
-                      {new Date(report.created_at).toLocaleDateString()}
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <span className={`severity-badge severity-${report.severity}`}>
+                      <AlertTriangle className="w-3 h-3 inline mr-1" />
+                      <span className="uppercase text-[11px] font-bold">{report.severity}</span>
                     </span>
-                    {report.ai_confidence && (
-                      <span className="text-emerald-400 font-medium flex items-center gap-1">
-                        <Sparkles className="w-3 h-3" />
-                        AI Score: {Math.round(report.ai_confidence * 100)}%
+                    <span className={`status-badge status-${report.status}`}>
+                      <Clock className="w-3 h-3 inline mr-1" />
+                      <span className="capitalize text-[11px] font-medium">{report.status}</span>
+                    </span>
+                  </div>
+
+                  <h3 className="text-base font-bold text-white line-clamp-1 mb-2">
+                    {report.title}
+                  </h3>
+                  <p className="text-xs text-gray-300 line-clamp-3 mb-4 leading-relaxed">
+                    {report.description}
+                  </p>
+
+                  <div className="pt-3 border-t border-gray-800/80 text-xs text-gray-400 space-y-1.5">
+                    <div className="flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-emerald-400" />
+                      <span className="truncate">{report.location}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-[11px] text-gray-500">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-3 h-3" />
+                        {new Date(report.created_at).toLocaleDateString()}
                       </span>
-                    )}
+                      {report.ai_confidence && (
+                        <span className="text-emerald-400 font-medium flex items-center gap-1">
+                          <Sparkles className="w-3 h-3" />
+                          AI Score: {Math.round(report.ai_confidence * 100)}%
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
 
       {/* Community Guardians & Ranger Units */}
-      <div>
+      <div className="reveal reveal-delay-3">
         <div className="mb-4">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             <Shield className="w-5 h-5 text-emerald-400" />
