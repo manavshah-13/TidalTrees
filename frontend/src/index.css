@@ -65,7 +65,31 @@ body {
   backdrop-filter: blur(20px);
   background: rgba(4, 13, 16, 0.8);
   border-bottom: 1px solid rgba(16, 185, 129, 0.14);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.navbar-scrolled {
+  background: rgba(2, 9, 11, 0.95) !important;
+  backdrop-filter: blur(28px) !important;
+  border-bottom: 1px solid rgba(16, 185, 129, 0.35) !important;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 0 18px rgba(16, 185, 129, 0.1);
+}
+
+.nav-tabs-container {
+  position: relative;
+}
+
+.nav-active-indicator {
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #10b981, #06b6d4);
+  border-radius: 2px;
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
 
 .navbar-container {
   max-width: 1200px;
@@ -1311,6 +1335,108 @@ body {
   transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
   background: linear-gradient(90deg, #10b981 0%, #06b6d4 100%);
 }
+
+/* ==========================================================================
+   Phase D2: Rich 4-Column Footer Styling
+   ========================================================================== */
+
+.footer-column-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  margin-bottom: 1.25rem;
+}
+
+.footer-link {
+  display: block;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-bottom: 0.65rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.footer-link:hover {
+  color: #34d399;
+  transform: translateX(3px);
+}
+
+.footer-social-btn {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.6rem;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  transition: all 0.2s ease;
+}
+
+.footer-social-btn:hover {
+  color: #34d399;
+  border-color: rgba(52, 211, 153, 0.5);
+  background: rgba(16, 185, 129, 0.16);
+  transform: translateY(-2px);
+}
+
+.footer-newsletter-card {
+  background: rgba(8, 26, 29, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(16, 185, 129, 0.18);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
+
+.footer-input {
+  width: 100%;
+  background: rgba(4, 15, 18, 0.85);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.85rem;
+  color: #ffffff;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.footer-input:focus {
+  border-color: #34d399;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.footer-submit-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.65rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+
+.footer-submit-btn:hover {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.45);
+  transform: translateY(-1px);
+}
+
+
 
 
 

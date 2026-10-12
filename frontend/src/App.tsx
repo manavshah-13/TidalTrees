@@ -9,7 +9,7 @@ import { AiValidation } from './pages/AiValidation';
 import { MultiStepReportModal } from './components/reports/MultiStepReportModal';
 import { AuthModal } from './components/auth/AuthModal';
 import { useAuthStore } from './store/useAuthStore';
-import { Trees, Heart } from 'lucide-react';
+import { Footer } from './components/layout/Footer';
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('dashboard');
@@ -93,21 +93,10 @@ export const App: React.FC = () => {
       />
 
       {/* Footer */}
-      <footer className="footer-root">
-        <div className="footer-container">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <Trees className="w-5 h-5 text-emerald-400" />
-              <span className="font-bold text-white text-sm">TidalTrees</span>
-              <span className="text-gray-500 text-xs">| Participatory Mangrove Surveillance System</span>
-            </div>
-            <div className="text-xs text-gray-400 flex items-center gap-1">
-              <span>Built for Coastal Conservation & Hackathon Excellence</span>
-              <Heart className="w-3.5 h-3.5 text-rose-500 inline" />
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer
+        onNavigateTab={setActiveTab}
+        onOpenReportModal={() => setIsReportModalOpen(true)}
+      />
     </div>
   );
 };
