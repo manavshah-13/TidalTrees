@@ -109,7 +109,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
               </button>
 
               <button
-                onClick={() => scrollToSection('dashboard-map')}
+                onClick={() => scrollToSection('map-section')}
                 className="btn-secondary flex items-center gap-2 py-3 px-6 text-sm font-semibold"
               >
                 <Compass className="w-4 h-4 text-emerald-400" />
